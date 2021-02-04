@@ -1,0 +1,8 @@
+{"admin":
+	{"username":"admin",
+	"password":"admin",
+	"firstName":"MARKO",
+	"lastName":"MARKOVIC",
+	"gender":"MALE",
+	"birthDate":"12.12.1988.",
+	"active":true}}

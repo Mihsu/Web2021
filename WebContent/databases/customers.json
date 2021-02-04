@@ -1,0 +1,18 @@
+{"customer":
+	{"username":"customer",
+	"password":"customer",
+	"firstName":"Micko",
+	"lastName":"Miculic",
+	"gender":"MALE",
+	"birthDate":"11.11.1990.",
+	"active":true,
+	"collectedPoints":150},
+"user2":{
+	"username":"user2",
+	"password":"user2",
+	"firstName":"Radojka",
+	"lastName":"Radovanovic",
+	"gender":"FEMALE",
+	"birthDate":"05.02.1999.",
+	"active":true,
+	"collectedPoints":500}}
