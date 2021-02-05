@@ -2,21 +2,17 @@ package services;
 
 
 
-import java.util.Map;
-
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
-import Enums.CustomerTypeName;
-import Enums.Gender;
-import Enums.Role;
 import Model.Admin;
 import Model.Customer;
 import Model.Seller;
@@ -26,6 +22,10 @@ import collections.Customers;
 import collections.Sellers;
 import dto.LoginUserDTO;
 import dto.RegisterUserDTO;
+import dto.UserDTO;
+import enums.CustomerTypeNames;
+import enums.Genders;
+import enums.Roles;
 
 @Path("/auth")
 public class AuthService {
@@ -40,45 +40,74 @@ public class AuthService {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.TEXT_PLAIN)
 	public String login(LoginUserDTO dto) {
-		if (tryLoginAdmin(dto.getUsername(), dto.getPassword()))
-			return "admin";
-		else if (tryLoginCustomer(dto.getUsername(), dto.getPassword()).equalsIgnoreCase("ok")) {
-			return "user";
+		Admin a;
+		Seller s;
+		Customer c;
+		if ((a = tryLoginAdmin(dto.getUsername(), dto.getPassword())) != null) {
+			System.out.println(a.toString());
+			return a.getUsername() + ",admin";
 		}
-		else if (tryLoginCustomer(dto.getUsername(), dto.getPassword()).equalsIgnoreCase("blocked")) {
-
-			return "blocked";
+		else if ((c = tryLoginCustomer(dto.getUsername(), dto.getPassword())) != null) {
+			return c.getUsername() + ",customer";
 		}
-		else if (tryLoginSeller(dto.getUsername(), dto.getPassword())) {
+		else if ((s = tryLoginSeller(dto.getUsername(), dto.getPassword())) != null) {
 
-			return "seller";
+			return s.getUsername()+ ",seller";
 		}
+		return "NOT_FOUND";
 
-		return "none";
+	}
+	
+	@GET
+	@Path("/loggedIn/{username}/{role}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public UserDTO loggedIn(@PathParam("username") String username, @PathParam("role") String role) {
+		if(role.equalsIgnoreCase("admin")) {
+			Admins admins = new Admins(ctx.getRealPath("."));
+			if (admins.getAdmins().containsKey(username)) {
+				Admin admin = admins.getAdmins().get(username);
+				return new UserDTO(admin.getUsername(), admin.getFirstName(), admin.getLastName(),admin.getGender().toString(), admin.getBirthDate());
+			}
+		}else if(role.equalsIgnoreCase("customer")){
+			Customers customers = new Customers(ctx.getRealPath("."));
+			if (customers.getCustomers().containsKey(username)) {
+				Customer customer = customers.getCustomers().get(username);
+				return new UserDTO(customer.getUsername(), customer.getFirstName(), customer.getLastName(),customer.getGender().toString(), customer.getBirthDate(), customer.getCollectedPoints());
+			}
+		}
+		else if(role.equalsIgnoreCase("seller")){
+			Sellers sellers = new Sellers(ctx.getRealPath("."));
+			if (sellers.getSellers().containsKey(username)) {
+				Seller seller = sellers.getSellers().get(username);
+				return new UserDTO(seller.getUsername(), seller.getFirstName(), seller.getLastName(),seller.getGender().toString(), seller.getBirthDate());
+			}
+		}
+		return null;
+		
 	}
 	
 	@POST
 	@Path("/register")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public boolean register(RegisterUserDTO newUser) {
+	public String register(RegisterUserDTO newUser) {
 		Customers customers = new Customers(ctx.getRealPath("."));
 		Admins admins = new Admins(ctx.getRealPath("."));
 
 		if (customers.getCustomers().containsKey(newUser.getUsername())) {
-			return false;
+			return "ALREADYEXISTS";
 	    }
 		else if (admins.getAdmins().containsKey(newUser.getUsername())) {
-			return false;
+			return "ALREADYEXISTS";
 		}
 		else {
 			
 			Customer newCustomer = registerDtoToCustomer(newUser);
 			newCustomer.setCollectedPoints(0);
-			newCustomer.setCustomerTypeName(CustomerTypeName.SILVER);
+			newCustomer.setCustomerTypeName(CustomerTypeNames.SILVER);
 			
 			customers.getCustomers().put(newCustomer.getUsername(), newCustomer);
 			customers.save(ctx.getRealPath("."));
-			return true;
+			return "OK";
 		}
 	}
 	private Customer registerDtoToCustomer(RegisterUserDTO newUser) {
@@ -89,11 +118,11 @@ public class AuthService {
 		cust.setLastName(newUser.getLastName());
 		if(newUser.getGender().equalsIgnoreCase("MALE"))
 		{
-			cust.setGender(Gender.MALE);
+			cust.setGender(Genders.MALE);
 		}else {
-			cust.setGender(Gender.FEMALE);
+			cust.setGender(Genders.FEMALE);
 		}
-		cust.setRole(Role.CUSTOMER);
+		cust.setRole(Roles.CUSTOMER);
 		cust.setPassword(newUser.getPassword());
 		cust.setUsername(newUser.getUsername());
 		return cust;
@@ -105,71 +134,53 @@ public class AuthService {
 		req.getSession().invalidate();
 	}
 	
-	
-	@GET
-	@Path("/loggedIn")
-	@Produces(MediaType.APPLICATION_JSON)
-	public Object getLoggedIn() {
-		if (req.getSession().getAttribute("admin") != null) {
-			return req.getSession().getAttribute("admin");
-		} else if (req.getSession().getAttribute("customer") != null) {
-			return req.getSession().getAttribute("customer");
-		} else if (req.getSession().getAttribute("seller") != null) {
-			return req.getSession().getAttribute("seller");
-		} else {
-			return null;
-		}
-	}
-	
-	private String tryLoginCustomer(String username, String password) {
+	private Customer tryLoginCustomer(String username, String password) {
 		Customers customers = new Customers(ctx.getRealPath("."));
 		
 		if (customers.getCustomers().containsKey(username)) {
 			
 			Customer customer = customers.getCustomers().get(username);
-			System.out.println(customer);
 			if (customer.getPassword().equals(password)) {
 				if (customer.isActive()) {
-					req.getSession().setAttribute("customer", customer);
-					return "ok";
+					return customer;
 				} else {
-					return "blocked";
+					return null;
 				}
 			}
 		}
 
-		return "false";
+		return null;
 	}
 	
-	private boolean tryLoginAdmin(String username, String password) {
+	private Admin tryLoginAdmin(String username, String password) {
 		Admins admins = new Admins(ctx.getRealPath("."));
 		
 		if (admins.getAdmins().containsKey(username)) {
 			Admin admin = admins.getAdmins().get(username);
 			if (admin.getPassword().equals(password)) {
-				req.getSession().setAttribute("admin", admin);
-				return true;
+				req.getSession(true).setAttribute("admin", admin);
+				return admin;
 			} else {
-				return false;
+				return null;
 			}
 			
 		}
-		return false;
+		return null;
 	}
 	
-	private boolean tryLoginSeller(String username, String password) {
+	private Seller tryLoginSeller(String username, String password) {
 		Sellers sellers = new Sellers(ctx.getRealPath("."));
 		
 		if (sellers.getSellers().containsKey(username)) {
 			Seller seller = sellers.getSellers().get(username);
 			if (seller.getPassword().equals(password)) {
 				req.getSession().setAttribute("seller", seller);
-				return true;
+				return seller;
 			} else {
-				return false;
+				return null;
 			}
 			
 		}
-		return false;
+		return null;
 	}
 }

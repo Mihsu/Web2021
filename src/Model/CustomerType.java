@@ -1,10 +1,10 @@
 package Model;
 
-import Enums.CustomerTypeName;
+import enums.CustomerTypeNames;
 
 public class CustomerType {
 
-	private CustomerTypeName name;
+	private CustomerTypeNames name;
 	
 	private int discount;
 	
@@ -14,18 +14,18 @@ public class CustomerType {
 		super();
 	}
 
-	public CustomerType(CustomerTypeName name, int discount, int requiredPoints) {
+	public CustomerType(CustomerTypeNames name, int discount, int requiredPoints) {
 		super();
 		this.name = name;
 		this.discount = discount;
 		this.requiredPoints = requiredPoints;
 	}
 
-	public CustomerTypeName getName() {
+	public CustomerTypeNames getName() {
 		return name;
 	}
 
-	public void setName(CustomerTypeName name) {
+	public void setName(CustomerTypeNames name) {
 		this.name = name;
 	}
 

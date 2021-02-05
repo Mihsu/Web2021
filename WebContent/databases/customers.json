@@ -7,6 +7,24 @@
 	"birthDate":"11.11.1990.",
 	"active":true,
 	"collectedPoints":150},
+"rada":{
+	"username":"kupujemKarte",
+	"password":"kupujemKarte",
+	"firstName":"Radojka",
+	"lastName":"Radovanovic",
+	"gender":"FEMALE",
+	"birthDate":"05.02.1999.",
+	"active":true,
+	"collectedPoints":500},
+"zvonkomojheroj":{
+	"username":"zvonkomojheroj",
+	"password":"zvonkomojheroj",
+	"firstName":"Mijat",
+	"lastName":"Mijatovic",
+	"gender":"MALE",
+	"birthDate":"05.02.1990.",
+	"active":true,
+	"collectedPoints":5000},
 "user2":{
 	"username":"user2",
 	"password":"user2",
@@ -15,4 +33,4 @@
 	"gender":"FEMALE",
 	"birthDate":"05.02.1999.",
 	"active":true,
-	"collectedPoints":500}}
+	"collectedPoints":600}}

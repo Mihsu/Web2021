@@ -1,13 +1,12 @@
-package Model;
+package dto;
 
-import java.util.Date;
-
-import enums.ManifestationsStatus;
+import Model.Location;
 import enums.ManifestationTypes;
+import enums.ManifestationsStatus;
 
-public class Manifestation {
-	
-	private String name;
+public class ManifestationDTO {
+
+private String name;
 	
 	private ManifestationTypes type;
 	
@@ -17,30 +16,23 @@ public class Manifestation {
 	
 	private double regularPrice;
 	
-	private ManifestationsStatus status;
-	
 	private Location location;
-	
-	private String posterImagePath;
 
-	private double rating;
 	
-	public Manifestation() {
+	public ManifestationDTO() {
 		super();
 	}
 
-	public Manifestation(String name, ManifestationTypes type, int capacity, String dateAndTime, double regularPrice,
-			ManifestationsStatus status, Location location, String posterImagePath,double rating) {
+	public ManifestationDTO(String name, ManifestationTypes type, int capacity, String dateAndTime, double regularPrice, Location location) {
 		super();
 		this.name = name;
 		this.type = type;
 		this.capacity = capacity;
 		this.dateAndTime = dateAndTime;
 		this.regularPrice = regularPrice;
-		this.status = status;
+
 		this.location = location;
-		this.posterImagePath = posterImagePath;
-		this.rating = rating;
+
 	}
 
 	public String getName() {
@@ -83,13 +75,6 @@ public class Manifestation {
 		this.regularPrice = regularPrice;
 	}
 
-	public ManifestationsStatus getStatus() {
-		return status;
-	}
-
-	public void setStatus(ManifestationsStatus status) {
-		this.status = status;
-	}
 
 	public Location getLocation() {
 		return location;
@@ -99,22 +84,6 @@ public class Manifestation {
 		this.location = location;
 	}
 
-	public String getPosterImagePath() {
-		return posterImagePath;
-	}
-
-	public void setPosterImagePath(String posterImagePath) {
-		this.posterImagePath = posterImagePath;
-	}
-
-	public double getRating() {
-		return rating;
-	}
-
-	public void setRating(double rating) {
-		this.rating = rating;
-	}
 	
 	
-
 }

@@ -1,6 +1,6 @@
 package dto;
 
-import Enums.Gender;
+import enums.Genders;
 
 public class RegisterUserDTO {
 
