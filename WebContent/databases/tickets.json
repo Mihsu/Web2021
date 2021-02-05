@@ -1,0 +1,40 @@
+{"1":{
+"id":"1",
+"manifestationName":"Koncert Zvonka Bogdana",
+"dateAndTime":"01.01.2021. 10:00",
+"price":1000,
+"buyerUsername":"rada",
+"ticketType":"REGULAR",
+"status":"RESERVED"},
+"2":{
+"id":"2",
+"manifestationName":"Koncert Zvonka Bogdana",
+"dateAndTime":"01.01.2021. 10:00",
+"price":2000,
+"buyerUsername":"user2",
+"ticketType":"FAN_PIT",
+"status":"RESERVED"}
+,"3":{
+"id":"2",
+"manifestationName":"Koncert Zvonka Bogdana",
+"dateAndTime":"01.01.2021. 10:00",
+"price":2000,
+"buyerUsername":"user2",
+"ticketType":"FAN_PIT",
+"status":"RESERVED"},
+"4":{
+"id":"2",
+"manifestationName":"Koncert Zvonka Bogdana",
+"dateAndTime":"01.01.2021. 10:00",
+"price":4000,
+"buyerUsername":"zvonkomojheroj",
+"ticketType":"VIP",
+"status":"RESERVED"},
+"5":{
+"id":"2",
+"manifestationName":"Koncert Zvonka Bogdana",
+"dateAndTime":"01.01.2021. 10:00",
+"price":100,
+"buyerUsername":"customer",
+"ticketType":"REGULAR",
+"status":"RESERVED"}}

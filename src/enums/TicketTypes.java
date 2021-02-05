@@ -1,6 +1,6 @@
 package enums;
 
-public enum TicketType {
+public enum TicketTypes {
 
 	VIP, REGULAR, FAN_PIT
 }

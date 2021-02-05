@@ -1,39 +1,38 @@
-package Model;
+package dto;
 
-import java.util.Date;
 
 import enums.TicketsStatus;
 import enums.TicketTypes;
 
-public class Ticket {
-	
+public class TicketDbDTO {
+
 	private int id;
 	
-	private Manifestation manifestation;
+	private String manifestationName;
 	
-	private Date dateAndTime;
+	private String dateAndTime;
 	
 	private double price;
 	
-	private Customer buyer;
+	private String buyerUsername;
 	
 	private TicketsStatus status;
 	
 	private TicketTypes ticketType;
 
 	
-	public Ticket() {
+	public TicketDbDTO() {
 		super();
 	}
 
-	public Ticket(int id, Manifestation manifestation, Date dateAndTime, double price, Customer buyer,
+	public TicketDbDTO(int id, String manifestationName, String dateAndTime, double price, String buyer,
 			TicketsStatus status, TicketTypes ticketType) {
 		super();
 		this.id = id;
-		this.manifestation = manifestation;
+		this.manifestationName = manifestationName;
 		this.dateAndTime = dateAndTime;
 		this.price = price;
-		this.buyer = buyer;
+		this.buyerUsername = buyer;
 		this.status = status;
 		this.ticketType = ticketType;
 	}
@@ -46,19 +45,19 @@ public class Ticket {
 		this.id = id;
 	}
 
-	public Manifestation getManifestation() {
-		return manifestation;
+	public String getManifestationName() {
+		return manifestationName;
 	}
 
-	public void setManifestation(Manifestation manifestation) {
-		this.manifestation = manifestation;
+	public void setManifestationName(String manifestation) {
+		this.manifestationName = manifestation;
 	}
 
-	public Date getDateAndTime() {
+	public String getDateAndTime() {
 		return dateAndTime;
 	}
 
-	public void setDateAndTime(Date dateAndTime) {
+	public void setDateAndTime(String dateAndTime) {
 		this.dateAndTime = dateAndTime;
 	}
 
@@ -70,12 +69,12 @@ public class Ticket {
 		this.price = price;
 	}
 
-	public Customer getBuyer() {
-		return buyer;
+	public String getBuyerUsername() {
+		return buyerUsername;
 	}
 
-	public void setBuyer(Customer buyer) {
-		this.buyer = buyer;
+	public void setBuyerUsername(String buyer) {
+		this.buyerUsername = buyer;
 	}
 
 	public TicketsStatus getStatus() {
@@ -93,6 +92,5 @@ public class Ticket {
 	public void setTicketType(TicketTypes ticketType) {
 		this.ticketType = ticketType;
 	}
-	
 	
 }

@@ -61,7 +61,7 @@ public class ManifestationService {
 		manifests.getManifestatations().get(m.getName()).setLocation(m.getLocation());;
 		manifests.getManifestatations().get(m.getName()).setName(m.getName());;
 		manifests.getManifestatations().get(m.getName()).setRegularPrice(m.getRegularPrice());;
-
+		manifests.getManifestatations().get(m.getName()).setType(m.getType());;
 		manifests.save(ctx.getRealPath("."));
 		
 		return "OK";
