@@ -1,52 +1,47 @@
-package Model;
+package dto;
 
 import enums.Genders;
 import enums.Roles;
 
-public class User {
+public class UserDTO {
 
 	private String username;
 	
-	private String password;
 	
 	private String firstName;
 	
 	private String lastName;
 	
-	private Genders gender;
+	private String gender;
 	
 	private String birthDate;
 	
-	private Roles role;
-	
-	private boolean active;
+	private int collectedPoints;
 
 	
-	public User() {
+	public UserDTO() {
 		super();
 	}
 	
-	public User(String username, String password, String firstName, String lastName, Genders gender, String birthDate,
-			Roles role, boolean active) {
-		super();
-		this.username = username;
-		this.password = password;
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.gender = gender;
-		this.birthDate = birthDate;
-		this.role = role;
-		this.active = active;
-	}
-	
-
-	public User(String username, String firstName, String lastName, Genders gender, String birthDate) {
+	public UserDTO(String username,  String firstName, String lastName, String gender, String birthDate) {
 		super();
 		this.username = username;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.gender = gender;
 		this.birthDate = birthDate;
+
+	}
+	
+	public UserDTO(String username,  String firstName, String lastName, String gender, String birthDate, int collectedPoints) {
+		super();
+		this.username = username;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.gender = gender;
+		this.birthDate = birthDate;
+		this.collectedPoints = collectedPoints;
+
 	}
 
 	public String getUsername() {
@@ -57,14 +52,7 @@ public class User {
 		this.username = username;
 	}
 
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
+	
 	public String getFirstName() {
 		return firstName;
 	}
@@ -81,11 +69,11 @@ public class User {
 		this.lastName = lastName;
 	}
 
-	public Genders getGender() {
+	public String getGender() {
 		return gender;
 	}
 
-	public void setGender(Genders gender) {
+	public void setGender(String gender) {
 		this.gender = gender;
 	}
 
@@ -97,31 +85,19 @@ public class User {
 		this.birthDate = birthDate;
 	}
 
-	public Roles getRole() {
-		return role;
-	}
-
-	public void setRole(Roles role) {
-		this.role = role;
-	}
-
-	public boolean isActive() {
-		return active;
-	}
-
-	public void setActive(boolean active) {
-		this.active = active;
-	}
 
 	@Override
 	public String toString() {
-		return "User [username=" + username + ", password=" + password + ", firstName=" + firstName + ", lastName="
-				+ lastName + ", gender=" + gender + ", birthDate=" + birthDate + ", role=" + role + ", active=" + active
+		return "User [username=" + username + ", password="  + ", firstName=" + firstName + ", lastName="
+				+ lastName + ", gender=" + gender + ", birthDate=" + birthDate + ", role="  + ", active=" 
 				+ "]";
 	}
-	
-	
-	
-	
 
+	public int getCollectedPoints() {
+		return collectedPoints;
+	}
+
+	public void setCollectedPoints(int collectedPoints) {
+		this.collectedPoints = collectedPoints;
+	}
 }

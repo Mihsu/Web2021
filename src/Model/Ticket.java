@@ -2,8 +2,8 @@ package Model;
 
 import java.util.Date;
 
-import Enums.TicketStatus;
-import Enums.TicketType;
+import enums.TicketStatus;
+import enums.TicketType;
 
 public class Ticket {
 	
