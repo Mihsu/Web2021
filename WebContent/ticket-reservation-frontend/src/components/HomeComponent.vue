@@ -96,8 +96,7 @@
 
               Details
             </b-button>
-            <b-button v-if="isSeller" size="sm" @click="info(row.item, row.index, $event.target)" class="mr-1">
-
+            <b-button v-if="isSeller" size="sm" @click="editModalInfo(row.item, row.index, $event.target)" class="mr-1">
               Edit
             </b-button>
           </template>
@@ -162,7 +161,114 @@
 <!--          <img :src="getImgUrl()" alt="">-->
         </b-modal>
 
+
+
+        <!-- Edit modal -->
+        <b-modal :id="this.editModal.id" :title="this.editModal.title" @ok="updateManifestation" >
+
+          <b-form-group
+              label="Name:"
+          >
+            <b-input disabled v-model="this.manifestation.name" required></b-input>
+          </b-form-group>
+
+          <b-form-group
+              label="Current date:"
+          >
+            <b-card>{{ this.manifestation.date }}</b-card>
+          </b-form-group>
+          <b-form-group
+              label="Choose new date:"
+          >
+            <b-input type="date" v-model="editDate" required></b-input>
+          </b-form-group>
+
+          <b-form-group
+              label="Date:"
+          >
+            <b-form-timepicker v-model="editTime" placeholder="Choose new time" locale="en"></b-form-timepicker>
+          </b-form-group>
+
+
+          <b-form-group
+              label="Price:"
+          >
+            <b-input v-model="manifestation.price" required></b-input>
+          </b-form-group>
+            <b-form-group label="City:">
+            <b-form-input
+                v-model="manifestation.location.address.city"
+                type="text"
+                placeholder="Enter manifestation city"
+                required
+            ></b-form-input>
+            </b-form-group>
+            <b-form-group label="Street name:">
+              <b-form-input
+                  v-model="manifestation.location.address.streetName"
+                  type="text"
+                  placeholder="Enter manifestation street name:"
+                  required
+              ></b-form-input>
+            </b-form-group>
+            <b-form-group label="Street number:">
+              <b-form-input
+                  v-model="manifestation.location.address.streetNumber"
+                  type="text"
+                  placeholder="Enter manifestation street number:"
+                  required
+              ></b-form-input>
+            </b-form-group>
+            <b-form-group label="Postal code:">
+              <b-form-input
+                  v-model="manifestation.location.address.postalCode"
+                  type="text"
+                  placeholder="Enter postal code"
+                  required
+              ></b-form-input>
+            </b-form-group>
+
+            <b-form-group label="Latitude:">
+              <b-form-input
+                  v-model="manifestation.location.latitude"
+                  type="text"
+                  placeholder="Enter Latitude"
+                  required
+              ></b-form-input>
+            </b-form-group>
+            <b-form-group label="Longitude:">
+              <b-form-input
+                  v-model="manifestation.location.longitude"
+                  type="text"
+                  placeholder="Enter Longitude"
+                  required
+              ></b-form-input>
+            </b-form-group>
+
+
+          <b-form-group label="Type:" >
+            <b-form-select
+                id="input-3"
+                v-model="manifestation.type"
+                :options="manifestationTypes"
+                required
+            ></b-form-select>
+          </b-form-group>
+          <b-form-group
+              label="Status:"
+          >
+            <b-card>{{ this.manifestation.status }}</b-card>
+          </b-form-group>
+
+          <b-form-group
+              label="Capacity:"
+          >
+            <b-input required v-model="this.manifestation.capacity"></b-input>
+          </b-form-group>
+          <!--          <img :src="getImgUrl()" alt="">-->
+        </b-modal>
       </b-container>
+
   </div>
 </template>
 
@@ -182,6 +288,7 @@ export default {
         { key: 'rating', label: 'Rating', sortable: true, class: 'text-center'},
         { key: 'details', label: 'Details' }
       ],
+      manifestationTypes:["THEATRE", "FESTIVAL", "CONCERT", "OTHER"],
       isSeller:false,
       manifestation:{
         name:"",
@@ -203,6 +310,23 @@ export default {
         status:"",
         capacity:0
       },
+      manifestationEdit:{
+        name:"",
+        dateAndTime:"",
+        type:"",
+        location: {
+          address: {
+            city: "",
+            postalCode: "",
+            streetName: "",
+            streetNumber: "",
+          },
+          longitude:"",
+          latitude:"",
+        },
+        regularPrice:"",
+        capacity:""
+      },
       sortBy: '',
       sortDesc: false,
       sortDirection: 'asc',
@@ -213,7 +337,14 @@ export default {
         title: '',
         content: ''
       },
-      isLoggedIn: false
+      editModal: {
+        id: 'edit-modal',
+        title: 'Edit Manifestation',
+        content: ''
+      },
+      isLoggedIn: false,
+      editDate:'',
+      editTime:''
     }
   },
   computed: {
@@ -246,6 +377,22 @@ export default {
       this.manifestation.status = item.status;
       this.manifestation.capacity = item.capacity;
       this.$root.$emit('bv::show::modal', this.infoModal.id, button)
+    },
+    editModalInfo(item, index, button) {
+      this.manifestation.name = item.name;
+      this.manifestation.date = item.dateAndTime;
+      let date = this.manifestation.dateAndTime.split(' ')[0]
+      let time = this.manifestation.dateAndTime.split(' ')[1]
+      this.editDate = date;
+      this.editTime = time;
+      this.manifestation.location = item.location;
+      this.manifestation.price = item.regularPrice;
+      this.manifestation.rating = item.rating;
+      this.manifestation.picture = item.posterImagePath;
+      this.manifestation.type = item.type;
+      this.manifestation.status = item.status;
+      this.manifestation.capacity = item.capacity;
+      this.$root.$emit('bv::show::modal', this.editModal.id, button)
     },
     resetInfoModal() {
         this.manifestation.name = "";
@@ -285,7 +432,26 @@ export default {
       }else if (localStorage.getItem('role') === "seller"){
         this.$router.push('/seller-dashboard');
       }
+    },
+    updateManifestation(){
+      this.manifestationEdit.name = this.manifestation.name;
+      this.manifestationEdit.location = this.manifestation.location;
+      this.manifestationEdit.capacity = this.manifestation.capacity;
+      this.manifestationEdit.regularPrice = this.manifestation.price;
+      if(this.editTime !== '' && this.editDate !== ''){
+        this.manifestationEdit.dateAndTime = this.editDate + " " + this.editTime;
+      }else{
+        this.manifestationEdit.dateAndTime = this.manifestation.date;
+      }
+
+      this.manifestationEdit.type = this.manifestation.type;
+
+      console.log(this.manifestationEdit);
+      api.updateManifestation(this.manifestationEdit).then(response =>{
+        console.log(response)
+      });
     }
+
   }
 }
 </script>
