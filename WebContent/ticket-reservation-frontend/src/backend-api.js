@@ -11,7 +11,17 @@ export default {
     },
     register(newUserRequest){
         return AXIOS.post('/auth/register', newUserRequest);
+    },
+    getLoggedIn(loggedInUser, role){
+        return AXIOS.get('/auth/loggedIn/'+ loggedInUser + '/' + role);
+    },
+    updateInfo(changedUser, role) {
+        return AXIOS.post('/user/update/' + role, changedUser)
+    },
+    loadManifestations() {
+        return AXIOS.get('/manifestations/all')
+    },
+    createManifestation(manifestation) {
+        return AXIOS.post('/manifestations/add', manifestation)
     }
-
-
 }

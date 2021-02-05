@@ -1,30 +1,83 @@
 <template>
 <div>
-    <div>
-      <input type="text" placeholder="enter your username" v-model="user.username">
-      <input type="text" placeholder="enter your first name" v-model="user.firstName">
-      <input type="text" placeholder="enter your last name" v-model="user.lastName">
-      <input type="password" placeholder="enter your password" v-model="user.password">
-      <input type="password" placeholder="enter your password again" v-model="passwordAgain">
-      <input type="date" v-model="this.user.birthDate" min="1900-01-01" max="2018-12-31">
-      <select @change="onChangeGender($event)" name="gender">
-        <option value="Male">Male</option>
-        <option value="Female">Female</option>
-      </select>
-      <button @click="register()" >REGISTER</button>
-    </div>
 
-      <div class="alert alert-success collapse" role="alert">
-        You have successfully registered
-      </div>
-      <div v-if="isError" role="alert">
-        {{this.errorMessage}}
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
+    <b-form @submit="onSubmit" @reset="onReset" v-if="show">
+      <b-form-group label="Username:"
+      >
+        <b-form-input
+            v-model="user.username"
+            type="text"
+            placeholder="Enter username"
+            required
+        ></b-form-input>
+      </b-form-group>
 
+      <b-form-group  label="Username:"
+      >
+        <b-form-input
+            v-model="user.birthDate"
+            type="text"
+            placeholder="Enter username"
+            required
+        ></b-form-input>
+      </b-form-group>
+      <b-form-group label="Your Name:" >
+        <b-form-input
+            v-model="user.firstName"
+            type="text"
+            placeholder="Enter your first name"
+            required
+        ></b-form-input>
+      </b-form-group>
+
+      <b-form-group label="Your Last Name:" >
+        <b-form-input
+            v-model="user.lastName"
+            type="text"
+            placeholder="Enter your last name"
+            required
+        ></b-form-input>
+      </b-form-group>
+
+      <b-form-group label="Your Password:">
+        <b-form-input
+            v-model="user.password"
+            type="password"
+            placeholder="Enter your password"
+            required
+        ></b-form-input>
+      </b-form-group>
+
+      <b-form-group label="Confirm Your Password:" >
+        <b-form-input
+            v-model="passwordAgain"
+            type="password"
+            placeholder="Enter your password"
+            required
+        ></b-form-input>
+      </b-form-group>
+      <b-form-group label="Input Your birth date:" >
+        <b-form-input
+            v-model="user.birthDate"
+            type="date"
+            required
+        ></b-form-input>
+      </b-form-group>
+
+      <b-form-group label="Gender:" >
+        <b-form-select
+            id="input-3"
+            v-model="user.gender"
+            :options="genders"
+            required
+        ></b-form-select>
+      </b-form-group>
+
+      <b-button type="submit" variant="primary">Submit</b-button>
+      <b-button type="reset" variant="danger">Reset</b-button>
+    </b-form>
 </div>
+
 </template>
 
 <script>
@@ -40,27 +93,23 @@ name: "RegisterComponent",
         password: "",
         firstName: "",
         lastName: "",
-        gender: "Male",
+        gender: "MALE",
         birthDate:"2000-01-01",
-
-
 
       },
       passwordAgain: "",
-        genders:["Male", "Female"],
+      genders:["MALE", "FEMALE"],
+      form: {
+        email: '',
+        name: '',
+        gender: null
+      },
+      show: true
 
     }
   },
   methods:{
-    register(){
-      if (this.valid() === true) {
-        api.register(this.user);
-      }else{
-        this.isError = true;
-      }
-      console.log(this.user.birthDate);
 
-    },
     valid() {
       if (this.user.username === "") {
         this.errorMessage = "Name field is empty!"
@@ -86,12 +135,50 @@ name: "RegisterComponent",
       }
       return true
     },
-    onChangeGender:function(event){
-      this.user.gender = event.target.value;
-    },
+
     validPassword: function() {
       return this.user.password.length >= 6;
 
+    },onSubmit(event) {
+      event.preventDefault()
+      if (this.valid() === true) {
+       api.register(this.user)
+       .then((response) =>{
+         console.log(response)
+         if(response.data === "ALREADYEXISTS"){
+           alert("User with that username already exists");
+           event.preventDefault()
+         }else{
+           alert("Successfully registered, you can log in now!");
+           this.goHome();
+         }
+       });
+
+      }else{
+
+        alert(this.errorMessage);
+      }
+
+    },
+    goHome(){
+      this.$router.push('login')
+    }
+    ,
+    onReset(event) {
+      event.preventDefault()
+      // Reset our form values
+      this.user= {
+           username: "",
+            password: "",
+            firstName: "",
+            lastName: "",
+            gender: "MALE",
+            birthDate:"2000-01-01"}
+      // Trick to reset/clear native browser form validation state
+      this.show = false
+      this.$nextTick(() => {
+        this.show = true
+      })
     }
 
   },

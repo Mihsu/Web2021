@@ -1,0 +1,296 @@
+<template>
+  <div>
+    <b-button v-if="isLoggedIn" @click="logOut"> Log out</b-button>
+    <b-button v-if="isLoggedIn" @click="myProfileRoute">My Profile</b-button>
+    <b-button v-if="!isLoggedIn" @click="loginRoute"> Login</b-button>
+    <b-button v-if="!isLoggedIn" @click="registerRoute"> Register</b-button>
+    <b-button v-if="isLoggedIn" @click="dashboardRoute">DASHBOARD</b-button>
+      <b-container fluid="">
+        <!-- User Interface controls -->
+        <b-row>
+          <b-col lg="6" class="my-1">
+            <b-form-group
+                label="Sort"
+                label-for="sort-by-select"
+                label-cols-sm="3"
+                label-align-sm="right"
+                label-size="sm"
+                class="mb-0"
+                v-slot="{ ariaDescribedby }"
+            >
+              <b-input-group size="sm">
+                <b-form-select
+                    id="sort-by-select"
+                    v-model="sortBy"
+                    :options="sortOptions"
+                    :aria-describedby="ariaDescribedby"
+                    class="w-75"
+                >
+                  <template #first>
+                    <option value="">-- none --</option>
+                  </template>
+                </b-form-select>
+
+                <b-form-select
+                    v-model="sortDesc"
+                    :disabled="!sortBy"
+                    :aria-describedby="ariaDescribedby"
+                    size="sm"
+                    class="w-25"
+                >
+                  <option :value="false">Asc</option>
+                  <option :value="true">Desc</option>
+                </b-form-select>
+              </b-input-group>
+            </b-form-group>
+          </b-col>
+
+
+          <b-col lg="6" class="my-1">
+            <b-form-group
+                label="Filter"
+                label-for="filter-input"
+                label-cols-sm="3"
+                label-align-sm="right"
+                label-size="sm"
+                class="mb-0"
+            >
+              <b-input-group size="sm">
+                <b-form-input
+                    id="filter-input"
+                    v-model="filter"
+                    type="search"
+                    placeholder="Type to Search"
+                ></b-form-input>
+
+                <b-input-group-append>
+                  <b-button :disabled="!filter" @click="filter = ''">Clear</b-button>
+                </b-input-group-append>
+              </b-input-group>
+            </b-form-group>
+          </b-col>
+
+        </b-row>
+
+        <!-- Main table element -->
+        <b-table
+            :items="items"
+            :fields="fields"
+            :filter="filter"
+            :sort-by.sync="sortBy"
+            :sort-desc.sync="sortDesc"
+            :sort-direction="sortDirection"
+            stacked="md"
+            show-empty
+            small
+        >
+          <template #cell(name)="row">
+            {{ row.value }}
+          </template>
+
+          <template #cell(picture)="row">
+            {{ row.value }}
+          </template>
+          <template #cell(details)="row">
+            <b-button size="sm" @click="info(row.item, row.index, $event.target)" class="mr-1">
+
+              Details
+            </b-button>
+            <b-button v-if="isSeller" size="sm" @click="info(row.item, row.index, $event.target)" class="mr-1">
+
+              Edit
+            </b-button>
+          </template>
+
+          <template #row-details="row">
+            <b-card>
+              <ul>
+                <li v-for="(value, key) in row.item" :key="key">
+                  {{ key }}: {{ value }}
+                </li>
+              </ul>
+            </b-card>
+          </template>
+        </b-table>
+
+        <!-- Info modal -->
+        <b-modal :id="infoModal.id" :title="this.manifestation.name" ok-only @hide="resetInfoModal()">
+
+          <b-form-group
+              label="Name:"
+          >
+            <b-card>{{ this.manifestation.name }}</b-card>
+          </b-form-group>
+
+          <b-form-group
+              label="Date:"
+          >
+            <b-card>{{ this.manifestation.date }}</b-card>
+          </b-form-group>
+
+          <b-form-group
+              label="Price:"
+          >
+            <b-card>{{ this.manifestation.price }}</b-card>
+          </b-form-group>
+          <b-form-group
+              label="Location:"
+          >
+            <b-card><i>City : </i>{{ this.manifestation.location.address.city }} , <i>Address : </i>  {{ this.manifestation.location.address.streetName}} {{this.manifestation.location.address.streetNumber }},
+              {{this.manifestation.location.address.postalCode}}
+            </b-card>
+            <b-card> <i>Latitude :</i> {{this.manifestation.location.latitude}}, <i>Longitude : </i> {{this.manifestation.location.longitude}}
+
+            </b-card>
+          </b-form-group>
+          <b-form-group
+              label="Type:"
+          >
+            <b-card>{{ this.manifestation.type }}</b-card>
+          </b-form-group>
+          <b-form-group
+              label="Status:"
+          >
+            <b-card>{{ this.manifestation.status }}</b-card>
+          </b-form-group>
+
+          <b-form-group
+              label="Capacity:"
+          >
+            <b-card>{{ this.manifestation.capacity }}</b-card>
+          </b-form-group>
+<!--          <img :src="getImgUrl()" alt="">-->
+        </b-modal>
+
+      </b-container>
+  </div>
+</template>
+
+<script>
+import api from '../backend-api'
+export default {
+  name: "HomeComponent",
+  data() {
+    return {
+      items: [],
+      fields: [
+        { key: 'name', label: 'Manifestation Name', sortable: true, sortDirection: 'desc' },
+        { key: 'dateAndTime', label: 'Date', sortable: true, class: 'text-center' },
+        { key: 'location.address.city', label: 'Location', sortable: true, class: 'text-center' },
+        { key: 'type', label: 'Type', sortable: true, class: 'text-center' },
+        { key: 'regularPrice', label: 'Price', sortable: true, class: 'text-center' },
+        { key: 'rating', label: 'Rating', sortable: true, class: 'text-center'},
+        { key: 'details', label: 'Details' }
+      ],
+      isSeller:false,
+      manifestation:{
+        name:"",
+        dateAndTime:"",
+        type:"",
+        location: {
+          address: {
+            city: "",
+            postalCode: "",
+            streetName: "",
+            streetNumber: "",
+          },
+          longitude:"",
+          latitude:"",
+        },
+        price:"",
+        rating:"",
+        posterImagePath:"logo.png",
+        status:"",
+        capacity:0
+      },
+      sortBy: '',
+      sortDesc: false,
+      sortDirection: 'asc',
+      filter: null,
+      filterOn: [],
+      infoModal: {
+        id: 'info-modal',
+        title: '',
+        content: ''
+      },
+      isLoggedIn: false
+    }
+  },
+  computed: {
+    sortOptions() {
+      // Create an options list from our fields
+      return this.fields
+          .filter(f => f.sortable)
+          .map(f => {
+            return { text: f.label, value: f.key }
+          })
+    }
+  },
+  mounted() {
+    if(localStorage.getItem('role') === "seller"){
+      this.isSeller = true;
+    }
+    this.isLoggedIn = !!localStorage.getItem("username");
+    this.loadManifestations();
+
+  },
+  methods: {
+    info(item, index, button) {
+      this.manifestation.name = item.name;
+      this.manifestation.date = item.dateAndTime;
+      this.manifestation.location = item.location;
+      this.manifestation.price = item.regularPrice;
+      this.manifestation.rating = item.rating;
+      this.manifestation.picture = item.posterImagePath;
+      this.manifestation.type = item.type;
+      this.manifestation.status = item.status;
+      this.manifestation.capacity = item.capacity;
+      this.$root.$emit('bv::show::modal', this.infoModal.id, button)
+    },
+    resetInfoModal() {
+        this.manifestation.name = "";
+        this.manifestation.date = "";
+        this.manifestation.location =  "";
+        this.manifestation.price = "";
+        this.manifestation.rating =  "";
+        this.manifestation.picture = "";
+    },
+    getImgUrl(){
+      return require('../assets/'+this.manifestation.picture)
+    },
+    loadManifestations(){
+      api.loadManifestations().then(response =>{
+        console.log(response)
+        this.items = response.data
+      })
+    },
+    logOut(){
+      localStorage.clear();
+      this.$router.push('/login')
+    },
+    registerRoute(){
+      this.$router.push('/register');
+    },
+    loginRoute(){
+      this.$router.push('/login');
+    },
+    myProfileRoute(){
+      this.$router.push('/profile');
+    },
+    dashboardRoute(){
+      if(localStorage.getItem('role') === "admin")
+        this.$router.push('/admin-dashboard');
+      else if (localStorage.getItem('role') === "customer"){
+        this.$router.push('/customer-dashboard');
+      }else if (localStorage.getItem('role') === "seller"){
+        this.$router.push('/seller-dashboard');
+      }
+    }
+  }
+}
+</script>
+
+
+<style scoped>
+
+</style>

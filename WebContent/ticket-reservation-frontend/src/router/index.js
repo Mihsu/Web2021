@@ -2,6 +2,12 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import LoginComponent from "@/components/LoginComponent";
 import RegisterComponent from "@/components/RegisterComponent";
+import ProfileComponent from "@/components/ProfileComponent";
+import HomeComponent from "@/components/HomeComponent";
+import AdminDashboard from "@/components/AdminDashboard";
+import SellerDashboard from "@/components/SellerDashboard";
+import CustomerDashboard from "@/components/CustomerDashboard";
+
 
 Vue.use(VueRouter)
 
@@ -10,7 +16,7 @@ const routes = [
   {
     path: '/',
     name: 'Home',
-    component: LoginComponent
+    component: HomeComponent
   },
   {
     path: '/login',
@@ -25,6 +31,26 @@ const routes = [
     name: 'Register',
     component: RegisterComponent
   },
+  {
+    path: '/profile',
+    name: 'Profile',
+    component: ProfileComponent
+  },
+  {
+    path: '/admin-dashboard',
+    name: 'Admin Dashboard',
+    component: AdminDashboard
+  },
+  {
+    path: '/seller-dashboard',
+    name: 'Seller Dashboard',
+    component: SellerDashboard
+  },
+  {
+    path: '/customer-dashboard',
+    name: 'Customer Dashboard',
+    component: CustomerDashboard
+  }
 
 ]
 
