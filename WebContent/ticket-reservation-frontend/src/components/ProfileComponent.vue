@@ -1,8 +1,8 @@
 <template>
   <div>
 
-    <b-button @click="logOut"> Log out</b-button>
-    <b-button @click="homeRoute">Home</b-button>
+    <b-button class="nav-button" @click="logOut"> Log out</b-button>
+    <b-button class="nav-button" @click="homeRoute">Home</b-button>
 
 <div class="my-profile-container">
   <div class="my-profile-info-container">
@@ -133,19 +133,19 @@
         </b-col>
       </b-row>
       <div class="complex-search">
-        <b-input class="complex-search-input" type="text" placeholder="Price from"></b-input>
-        <b-input class="complex-search-input" type="text" placeholder="Price to"></b-input>
+        <b-input class="complex-search-input" type="text" v-model="complexTicket.priceFrom" placeholder="Price from"></b-input>
+        <b-input class="complex-search-input" type="text" v-model="complexTicket.priceTo" placeholder="Price to"></b-input>
 
         <div>
           <label>Date from</label>
-          <b-input type="date" ></b-input>
+          <b-input type="date"  v-model="complexTicket.dateFrom" ></b-input>
         </div>
         <div>
           <label >Date to</label>
-          <b-input type="date"></b-input>
+          <b-input type="date"  v-model="complexTicket.dateTo"  ></b-input>
         </div>
 
-        <b-button>SEARCH</b-button>
+        <b-button @click="submitComplexSearch">SEARCH</b-button>
 
       </div>
       <b-table
@@ -228,6 +228,12 @@ name: "ProfileComponent",
         title: 'Comment on this Manifestation',
         content: ''
       },
+      complexTicket:{
+        priceFrom:"",
+        priceTo:"",
+        dateFrom:"",
+        dateTo:""
+      }
 
 
     }
@@ -235,6 +241,11 @@ name: "ProfileComponent",
   mounted() {
     this.getLoggedIn();
     this.getTicketsUser();
+    this.complexTicket={
+      priceFrom:"",
+          priceTo:"",
+          dateFrom:"2019-01-01",
+          dateTo:"2022-01-01"}
   },
   methods: {
     getTicketsUser(){
@@ -312,6 +323,11 @@ name: "ProfileComponent",
           }
 
         })
+      },
+      submitComplexSearch(){
+        api.ticketComplexSearch(this.complexTicket).then(response =>{
+          this.tickets = response.data;
+        })
       }
 
   },
@@ -365,13 +381,16 @@ name: "ProfileComponent",
   border: 1px solid #ced4da;
 
 }
+.nav-button {
+  margin-right: 5px;
+  border-radius: 7px;
 
+}
 .complex-search {
   display: flex;
   flex-direction: row;
   align-items: flex-end;
   margin-bottom: 15px;
-
 
 }
 

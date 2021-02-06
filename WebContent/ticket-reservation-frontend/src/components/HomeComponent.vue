@@ -77,21 +77,21 @@
 
           </b-row>
           <div class="complex-search">
-            <b-input class="complex-search-input" type="text" placeholder="Name"></b-input>
-            <b-input class="complex-search-input" type="text" placeholder="City"></b-input>
-            <b-input class="complex-search-input" type="text" placeholder="Price from"></b-input>
-            <b-input class="complex-search-input" type="text" placeholder="Price to"></b-input>
+            <b-input class="complex-search-input" type="text" placeholder="Name" v-model="manifestationSearch.name" ></b-input>
+            <b-input class="complex-search-input" type="text" placeholder="City"  v-model="manifestationSearch.city" ></b-input>
+            <b-input class="complex-search-input" type="text" placeholder="Price from" v-model="manifestationSearch.priceFrom" ></b-input>
+            <b-input class="complex-search-input" type="text" placeholder="Price to" v-model="manifestationSearch.priceTo" ></b-input>
 
             <div class="complex-search-date">
               <label>Date from</label>
-              <b-input type="date" ></b-input>
+              <b-input type="date" v-model="manifestationSearch.dateFrom"></b-input>
             </div>
             <div class="complex-search-date">
               <label >Date to</label>
-              <b-input type="date"></b-input>
+              <b-input type="date" v-model="manifestationSearch.dateTo"></b-input>
             </div>
 
-            <b-button class="complex-search-button">Search</b-button>
+            <b-button class="complex-search-button" @click="complexSearch">Search</b-button>
 
           </div>
           <!-- Main table element -->
@@ -122,6 +122,9 @@
               </b-button>
               <b-button v-if="isSeller" size="sm" @click="editModalInfo(row.item, row.index, $event.target)" class="mr-1">
                 Edit
+              </b-button>
+              <b-button v-if="row.item.status === 'INACTIVE' && isAdmin" size="sm" @click="approveManifestation(row.item)" class="mr-1">
+                Approve
               </b-button>
             </template>
 
@@ -248,7 +251,7 @@
         </b-container>
     </div>
     <div  v-if="isDetailedView">
-      <manifestation-detailed-view-component :manifestation="this.manifestation"></manifestation-detailed-view-component>
+      <manifestation-detailed-view-component v-on:goHome="showHomeComponent" :manifestation="this.manifestation"></manifestation-detailed-view-component>
     </div>
   </div>
 </template>
@@ -329,7 +332,15 @@ export default {
       isLoggedIn: false,
       editDate:'',
       editTime:'',
-      notCustomer:true
+      notCustomer:true,
+      isAdmin : false,
+      manifestationSearch: {
+        name:'',
+        city:'',
+        dateFrom:'2000-01-01',
+        dateTo:'2022-01-01',
+        priceFrom:'',
+        priceTo: ''}
     }
   },
   computed: {
@@ -343,11 +354,21 @@ export default {
     }
   },
   mounted() {
+    this.manifestationSearch= { name:"",
+        city:"",
+        dateFrom:"2000-01-01",
+        dateTo:"2022-01-01",
+        priceFrom:"",
+        priceTo: ""};
+
     if(localStorage.getItem('role') === "seller"){
       this.isSeller = true;
     }
-    if(localStorage.getItem('role') === 'customer'){
-      this.notCustomer = false
+    else if(localStorage.getItem('role') === 'customer'){
+      this.notCustomer = false;
+
+    }else if(localStorage.getItem('role') === 'admin'){
+      this.isAdmin = true;
     }
     this.isLoggedIn = !!localStorage.getItem("username");
     this.loadManifestations();
@@ -382,6 +403,11 @@ export default {
       this.manifestation.capacity = item.capacity;
       this.$root.$emit('bv::show::modal', this.editModal.id, button)
     },
+    approveManifestation(manifestation){
+      api.approveManifestation(manifestation.name);
+      alert("Successfully approved manifestation!")
+    },
+
     resetInfoModal() {
         this.manifestation.name = "";
         this.manifestation.date = "";
@@ -394,10 +420,17 @@ export default {
       return require('../assets/'+this.manifestation.picture)
     },
     loadManifestations(){
-      api.loadManifestations().then(response =>{
-        console.log(response)
-        this.items = response.data
-      })
+
+      if(localStorage.getItem('role') === 'customer') {
+        api.loadManifestationsActive().then(response =>{
+          this.items = response.data;
+        })
+      }else{
+        api.loadManifestations().then(response =>{
+
+          this.items = response.data;
+        })
+      }
     },
     logOut(){
       localStorage.clear();
@@ -434,7 +467,17 @@ export default {
 
       api.updateManifestation(this.manifestationEdit).then();
       alert("Successfully updated manifestation!")
+    },
+    showHomeComponent(){
+      this.isDetailedView = false;
+    },
+    complexSearch(){
+
+      api.manifestationComplexSearch(this.manifestationSearch).then(response =>{
+        this.items = response.data;
+      })
     }
+
 
   }
 }
@@ -489,7 +532,11 @@ export default {
   width: 600px;
 }
 
+.nav-button {
+  margin-right: 5px;
+  border-radius: 7px;
 
+}
 
 
 </style>
