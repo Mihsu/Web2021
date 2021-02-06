@@ -129,13 +129,13 @@ public class ManifestationService {
 			if(manifestation.getValue().getLocation().getAddress().getCity().contains(city)) {
 				flag2 = true;
 			}
-			if(!dateFrom.equalsIgnoreCase("") && !dateTo.equalsIgnoreCase("")) {
-				if(sdf.parse(manifestation.getValue().getDateAndTime()).after(sdf.parse(dateFrom))){
-					if(sdf.parse(manifestation.getValue().getDateAndTime()).before(sdf.parse(dateTo))){
-						flag3 = true;
-					}
+			
+			if(sdf.parse(manifestation.getValue().getDateAndTime()).after(sdf.parse(dateFrom))){
+				if(sdf.parse(manifestation.getValue().getDateAndTime()).before(sdf.parse(dateTo))){
+					flag3 = true;
 				}
 			}
+		
 			if(manifestation.getValue().getRegularPrice() >= priceFrom) {
 				if(manifestation.getValue().getRegularPrice() <= priceTo) {
 					flag4 = true;
@@ -144,10 +144,8 @@ public class ManifestationService {
 			}
 			if(flag1 && flag2 && flag3 && flag4) {
 				toReturnManifestations.add(manifestation.getValue());
-	
+				
 			}		
-			
-			
 		}
 		
 		return toReturnManifestations;
