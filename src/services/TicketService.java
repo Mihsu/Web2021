@@ -3,6 +3,8 @@ package services;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
+import Model.Manifestation;
+import Model.Ticket;
 import collections.Manifestations;
 import collections.Tickets;
 import dto.TicketDbDTO;
@@ -18,6 +20,7 @@ import java.util.Map;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -88,5 +91,47 @@ public class TicketService {
 			}
 		}
 		return all;
+	}
+	
+	@GET
+	@Path("/complex/{priceFrom}/{priceTo}/{dateFrom}/{dateTo}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Collection<TicketDbDTO> getTicketsComplexSearch(@PathParam("priceFrom")int priceFrom,
+			@PathParam("priceTo")int priceTo, @PathParam("dateFrom")String dateFrom, @PathParam("dateTo")String dateTo) throws ParseException  
+	{
+		
+		Tickets tickets = new Tickets(ctx.getRealPath("."));
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		ArrayList<TicketDbDTO> toReturnTickets = new ArrayList<>();
+		for(Map.Entry<Integer, TicketDbDTO> ticket : tickets.getTickets().entrySet())
+		{
+			boolean flag1 = false;
+			boolean flag2 = false;
+		
+	
+			
+			if(!dateFrom.equalsIgnoreCase("") && !dateTo.equalsIgnoreCase("")) {
+				if(sdf2.parse(ticket.getValue().getDateAndTime()).after(sdf.parse(dateFrom))){
+					if(sdf2.parse(ticket.getValue().getDateAndTime()).before(sdf.parse(dateTo))){
+						flag1 = true;
+					}
+				}
+			}
+			if(ticket.getValue().getPrice() >= priceFrom) {
+				if(ticket.getValue().getPrice() <= priceTo) {
+					flag2 = true;
+				}
+			
+			}
+			if(flag1 && flag2 ) {
+				toReturnTickets.add(ticket.getValue());
+	
+			}		
+			
+			
+		}
+		
+		return toReturnTickets;
 	}
 }

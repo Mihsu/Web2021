@@ -7,9 +7,13 @@
   },
   "posterImagePath":"logo.png",
   "rating": "5",
-  "status":"INACTIVE"}
+  "status":"ACTIVE"}
 ,
 "Exit Festival":{"name":"Exit Festival", "type": "FESTIVAL", "capacity": 300, "dateAndTime": "2020-07-24 20:00:00", "regularPrice": 2000, "location" :{"latitude":"12312212312", "longitude":"1223123", "address":{"streetName":"Tvrdjava","streetNumber":"99","city":"Novi Sad", "postalCode":"3322323"}},
-  "posterImagePath":"logo.png",
+  "posterImagePath":"Exit_Official_Logo.png",
+  "rating": "5",
+  "status":"ACTIVE"},
+ "Exit Festival2":{"name":"Exit Festival2", "type": "FESTIVAL", "capacity": 300, "dateAndTime": "2021-07-24 20:00:00", "regularPrice": 2000, "location" :{"latitude":"12312212312", "longitude":"1223123", "address":{"streetName":"Tvrdjava","streetNumber":"99","city":"Novi Sad", "postalCode":"3322323"}},
+  "posterImagePath":"Exit_Official_Logo.png",
   "rating": "5",
   "status":"INACTIVE"}}

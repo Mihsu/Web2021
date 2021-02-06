@@ -1,3 +1,4 @@
-[{"customerUsername":"customer","manifestationName":"Exit Festival", "content":"Najjaci festival", "rating":5,"approved":true},
-{"customerUsername":"customer","manifestationName":"Exit Festival", "content":"Najjaci festival", "rating":5,"approved":true},
-{"customerUsername":"customer","manifestationName":"Exit Festival", "content":"Najjaci festival", "rating":5,"approved":true}]
+{"1":{"id": 1, "customerUsername":"customer","manifestationName":"Exit Festival", "content":"Najjaci festival", "rating":5,"approved":true},
+"2":{"id": 2,"customerUsername":"customer","manifestationName":"Exit Festival", "content":"Najjaci festival", "rating":5,"approved":true},
+"3":{"id": 3,"customerUsername":"customer","manifestationName":"Exit Festival", "content":"Najjaci festival", "rating":5,"approved":false}
+}

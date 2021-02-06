@@ -3,13 +3,18 @@ package dto;
 
 public class CommentDbDTO {
 
+	private int id;
+	
 	private String customerUsername;
 	
 	private String manifestationName;
 	
 	private String content;
-	
+
+
 	private int rating;
+	
+	private boolean approved;
 
 	
 	public CommentDbDTO() {
@@ -24,6 +29,31 @@ public class CommentDbDTO {
 		this.rating = rating;
 	}
 
+	
+	
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public void setCustomerUsername(String customerUsername) {
+		this.customerUsername = customerUsername;
+	}
+
+	public void setManifestationName(String manifestationName) {
+		this.manifestationName = manifestationName;
+	}
+
+	public boolean isApproved() {
+		return approved;
+	}
+
+	public void setApproved(boolean approved) {
+		this.approved = approved;
+	}
 	public String getCustomerUsername() {
 		return customerUsername;
 	}

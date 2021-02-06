@@ -44,7 +44,7 @@ public class AuthService {
 		Seller s;
 		Customer c;
 		if ((a = tryLoginAdmin(dto.getUsername(), dto.getPassword())) != null) {
-			System.out.println(a.toString());
+
 			return a.getUsername() + ",admin";
 		}
 		else if ((c = tryLoginCustomer(dto.getUsername(), dto.getPassword())) != null) {
@@ -92,11 +92,13 @@ public class AuthService {
 	public String register(RegisterUserDTO newUser) {
 		Customers customers = new Customers(ctx.getRealPath("."));
 		Admins admins = new Admins(ctx.getRealPath("."));
-
+		Sellers sellers = new Sellers(ctx.getRealPath("."));
 		if (customers.getCustomers().containsKey(newUser.getUsername())) {
 			return "ALREADYEXISTS";
 	    }
 		else if (admins.getAdmins().containsKey(newUser.getUsername())) {
+			return "ALREADYEXISTS";
+		}else if(sellers.getSellers().containsKey(newUser.getUsername())){
 			return "ALREADYEXISTS";
 		}
 		else {
@@ -110,6 +112,10 @@ public class AuthService {
 			return "OK";
 		}
 	}
+	
+
+	
+	
 	private Customer registerDtoToCustomer(RegisterUserDTO newUser) {
 		Customer cust = new Customer();
 		cust.setActive(true);
