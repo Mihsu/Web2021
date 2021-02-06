@@ -3,6 +3,7 @@ package collections;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -13,35 +14,35 @@ import dto.CommentDbDTO;
 
 public class Comments {
 
-	private ArrayList<CommentDbDTO> comments;
+	private HashMap<Integer, CommentDbDTO> comments;
 	
 	public Comments() {
-		this.comments = new ArrayList<CommentDbDTO>();
+		this.comments = new HashMap<Integer, CommentDbDTO>();
 	}
 	
 	public Comments(String path) {
 		this.comments = this.load(path);
 	}
 
-	public Comments( ArrayList<CommentDbDTO> comments) {
+	public Comments( HashMap<Integer, CommentDbDTO> comments) {
 		super();
 		this.comments = comments;
 	}
 
-	public  ArrayList<CommentDbDTO> getComments() {
+	public HashMap<Integer, CommentDbDTO> getComments() {
 		return comments;
 	}
 
-	public void setComments( ArrayList<CommentDbDTO> comments) {
+	public void setComments( HashMap<Integer, CommentDbDTO> comments) {
 		this.comments = comments;
 	}
 	
-	public  ArrayList<CommentDbDTO> load(String path) {
+	public HashMap<Integer, CommentDbDTO> load(String path) {
 		ObjectMapper objectMapper = new ObjectMapper();
 		
 		try {
-			TypeReference< ArrayList<CommentDbDTO>> typeRef = new TypeReference< ArrayList<CommentDbDTO>>() {};
-			ArrayList<CommentDbDTO> comments = objectMapper.readValue(new File(path + "\\databases\\comments.json"), typeRef);
+			TypeReference<HashMap<Integer, CommentDbDTO>> typeRef = new TypeReference<HashMap<Integer, CommentDbDTO>>() {};
+			HashMap<Integer, CommentDbDTO> comments = objectMapper.readValue(new File(path + "\\databases\\comments.json"), typeRef);
           
             return comments;
 		} catch (IOException e) {

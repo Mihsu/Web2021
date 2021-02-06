@@ -1,8 +1,10 @@
 package dto;
 
+import enums.CustomerTypeNames;
+import enums.Genders;
+import enums.Roles;
 
-
-public class UserDTO {
+public class UsersDTO {
 
 	private String username;
 	
@@ -11,28 +13,22 @@ public class UserDTO {
 	
 	private String lastName;
 	
-	private String gender;
+	private Genders gender;
 	
 	private String birthDate;
 	
 	private int collectedPoints;
-
 	
-	public UserDTO() {
+	private Roles role;
+	
+	private CustomerTypeNames customerType;
+
+	public UsersDTO() {
 		super();
 	}
 	
-	public UserDTO(String username,  String firstName, String lastName, String gender, String birthDate) {
-		super();
-		this.username = username;
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.gender = gender;
-		this.birthDate = birthDate;
-
-	}
-	
-	public UserDTO(String username,  String firstName, String lastName, String gender, String birthDate, int collectedPoints) {
+	public UsersDTO(String username, String firstName, String lastName, Genders gender, String birthDate,
+			int collectedPoints, Roles role, CustomerTypeNames customerType) {
 		super();
 		this.username = username;
 		this.firstName = firstName;
@@ -40,9 +36,20 @@ public class UserDTO {
 		this.gender = gender;
 		this.birthDate = birthDate;
 		this.collectedPoints = collectedPoints;
-
+		this.role = role;
+		this.customerType = customerType;
 	}
 
+	public UsersDTO(String username, String firstName, String lastName, Genders gender, String birthDate, Roles role) {
+		this.username = username;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.gender = gender;
+		this.birthDate = birthDate;
+
+		this.role = role;
+
+	}
 	public String getUsername() {
 		return username;
 	}
@@ -51,7 +58,6 @@ public class UserDTO {
 		this.username = username;
 	}
 
-	
 	public String getFirstName() {
 		return firstName;
 	}
@@ -68,11 +74,11 @@ public class UserDTO {
 		this.lastName = lastName;
 	}
 
-	public String getGender() {
+	public Genders getGender() {
 		return gender;
 	}
 
-	public void setGender(String gender) {
+	public void setGender(Genders gender) {
 		this.gender = gender;
 	}
 
@@ -84,14 +90,6 @@ public class UserDTO {
 		this.birthDate = birthDate;
 	}
 
-
-	@Override
-	public String toString() {
-		return "User [username=" + username + ", password="  + ", firstName=" + firstName + ", lastName="
-				+ lastName + ", gender=" + gender + ", birthDate=" + birthDate + ", role="  + ", active=" 
-				+ "]";
-	}
-
 	public int getCollectedPoints() {
 		return collectedPoints;
 	}
@@ -99,4 +97,24 @@ public class UserDTO {
 	public void setCollectedPoints(int collectedPoints) {
 		this.collectedPoints = collectedPoints;
 	}
+
+	public Roles getRole() {
+		return role;
+	}
+
+	public void setRole(Roles role) {
+		this.role = role;
+	}
+
+	public CustomerTypeNames getCustomerType() {
+		return customerType;
+	}
+
+	public void setCustomerType(CustomerTypeNames customerType) {
+		this.customerType = customerType;
+	}
+	
+	
+	
+	
 }
