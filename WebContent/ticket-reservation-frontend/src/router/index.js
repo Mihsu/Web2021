@@ -6,7 +6,6 @@ import ProfileComponent from "@/components/ProfileComponent";
 import HomeComponent from "@/components/HomeComponent";
 import AdminDashboard from "@/components/AdminDashboard";
 import SellerDashboard from "@/components/SellerDashboard";
-import CustomerDashboard from "@/components/CustomerDashboard";
 
 
 Vue.use(VueRouter)
@@ -45,11 +44,6 @@ const routes = [
     path: '/seller-dashboard',
     name: 'Seller Dashboard',
     component: SellerDashboard
-  },
-  {
-    path: '/customer-dashboard',
-    name: 'Customer Dashboard',
-    component: CustomerDashboard
   }
 
 ]

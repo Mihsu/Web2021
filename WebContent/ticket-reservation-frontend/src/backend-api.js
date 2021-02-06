@@ -32,5 +32,12 @@ export default {
     },
     updateManifestation(manifestation){
         return AXIOS.post('/manifestations/update', manifestation)
+    },
+    getTicketsUser(username){
+        return AXIOS.get('/tickets/all/' + username)
+    },
+    submitComment(comment) {
+        return AXIOS.post('/comment', comment)
     }
+
 }

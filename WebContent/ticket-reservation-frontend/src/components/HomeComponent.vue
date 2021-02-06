@@ -1,281 +1,264 @@
 <template>
   <div>
-    <b-button v-if="isLoggedIn" @click="logOut"> Log out</b-button>
-    <b-button v-if="isLoggedIn" @click="myProfileRoute">My Profile</b-button>
-    <b-button v-if="!isLoggedIn" @click="loginRoute"> Login</b-button>
-    <b-button v-if="!isLoggedIn" @click="registerRoute"> Register</b-button>
-    <b-button v-if="isLoggedIn" @click="dashboardRoute">DASHBOARD</b-button>
+    <div class="home-page" v-if="!isDetailedView">
+      <div class="button-group-header">
+        <b-button v-if="isLoggedIn" @click="logOut"> Log out</b-button>
+        <b-button v-if="isLoggedIn" @click="myProfileRoute">My Profile</b-button>
+        <b-button v-if="!isLoggedIn" @click="loginRoute"> Login</b-button>
+        <b-button v-if="!isLoggedIn" @click="registerRoute"> Register</b-button>
+        <b-button v-if="isLoggedIn && notCustomer" @click="dashboardRoute">DASHBOARD</b-button>
+      </div>
+
       <b-container fluid="">
-        <!-- User Interface controls -->
-        <b-row>
-          <b-col lg="6" class="my-1">
-            <b-form-group
-                label="Sort"
-                label-for="sort-by-select"
-                label-cols-sm="3"
-                label-align-sm="right"
-                label-size="sm"
-                class="mb-0"
-                v-slot="{ ariaDescribedby }"
-            >
-              <b-input-group size="sm">
-                <b-form-select
-                    id="sort-by-select"
-                    v-model="sortBy"
-                    :options="sortOptions"
-                    :aria-describedby="ariaDescribedby"
-                    class="w-75"
-                >
-                  <template #first>
-                    <option value="">-- none --</option>
-                  </template>
-                </b-form-select>
+          <!-- User Interface controls -->
+          <b-row>
+            <b-col lg="6" class="my-1">
+              <b-form-group
+                  label="Sort"
+                  label-for="sort-by-select"
+                  label-cols-sm="3"
+                  label-align-sm="right"
+                  label-size="sm"
+                  class="mb-0"
+                  v-slot="{ ariaDescribedby }"
+              >
+                <b-input-group size="sm">
+                  <b-form-select
+                      id="sort-by-select"
+                      v-model="sortBy"
+                      :options="sortOptions"
+                      :aria-describedby="ariaDescribedby"
+                      class="w-75"
+                  >
+                    <template #first>
+                      <option value="">-- none --</option>
+                    </template>
+                  </b-form-select>
 
-                <b-form-select
-                    v-model="sortDesc"
-                    :disabled="!sortBy"
-                    :aria-describedby="ariaDescribedby"
-                    size="sm"
-                    class="w-25"
-                >
-                  <option :value="false">Asc</option>
-                  <option :value="true">Desc</option>
-                </b-form-select>
-              </b-input-group>
-            </b-form-group>
-          </b-col>
+                  <b-form-select
+                      v-model="sortDesc"
+                      :disabled="!sortBy"
+                      :aria-describedby="ariaDescribedby"
+                      size="sm"
+                      class="w-25"
+                  >
+                    <option :value="false">Asc</option>
+                    <option :value="true">Desc</option>
+                  </b-form-select>
+                </b-input-group>
+              </b-form-group>
+            </b-col>
 
 
-          <b-col lg="6" class="my-1">
-            <b-form-group
-                label="Filter"
-                label-for="filter-input"
-                label-cols-sm="3"
-                label-align-sm="right"
-                label-size="sm"
-                class="mb-0"
-            >
-              <b-input-group size="sm">
+            <b-col lg="6" class="my-1">
+              <b-form-group
+                  label="Search"
+                  label-for="filter-input"
+                  label-cols-sm="3"
+                  label-align-sm="right"
+                  label-size="sm"
+                  class="mb-0"
+              >
+                <b-input-group size="sm">
+                  <b-form-input
+                      id="filter-input"
+                      v-model="filter"
+                      type="search"
+                      class="filter-search"
+                      placeholder="Type to Search"
+                  ></b-form-input>
+
+                  <b-input-group-append>
+                    <b-button :disabled="!filter" @click="filter = ''">Clear</b-button>
+                  </b-input-group-append>
+                </b-input-group>
+              </b-form-group>
+            </b-col>
+
+          </b-row>
+          <div class="complex-search">
+            <b-input class="complex-search-input" type="text" placeholder="Name"></b-input>
+            <b-input class="complex-search-input" type="text" placeholder="City"></b-input>
+            <b-input class="complex-search-input" type="text" placeholder="Price from"></b-input>
+            <b-input class="complex-search-input" type="text" placeholder="Price to"></b-input>
+
+            <div class="complex-search-date">
+              <label>Date from</label>
+              <b-input type="date" ></b-input>
+            </div>
+            <div class="complex-search-date">
+              <label >Date to</label>
+              <b-input type="date"></b-input>
+            </div>
+
+            <b-button class="complex-search-button">Search</b-button>
+
+          </div>
+          <!-- Main table element -->
+          <b-table
+              :items="items"
+              :fields="fields"
+              :filter="filter"
+              :filter-included-fields="filterOn"
+              :sort-by.sync="sortBy"
+              :sort-desc.sync="sortDesc"
+              :sort-direction="sortDirection"
+              stacked="md"
+              show-empty
+              small
+              class="table-home-page"
+          >
+            <template #cell(name)="row">
+              {{ row.value }}
+            </template>
+
+            <template #cell(picture)="row">
+              {{ row.value }}
+            </template>
+            <template #cell(details)="row">
+              <b-button size="sm" @click="info(row.item)" class="mr-1">
+
+                Details
+              </b-button>
+              <b-button v-if="isSeller" size="sm" @click="editModalInfo(row.item, row.index, $event.target)" class="mr-1">
+                Edit
+              </b-button>
+            </template>
+
+            <template #row-details="row">
+              <b-card>
+                <ul>
+                  <li v-for="(value, key) in row.item" :key="key">
+                    {{ key }}: {{ value }}
+                  </li>
+                </ul>
+              </b-card>
+            </template>
+          </b-table>
+
+          <!-- Info modal -->
+
+
+
+
+          <!-- Edit modal -->
+            <b-modal class="edit-modal-container" :id="this.editModal.id" :title="this.editModal.title" @ok="updateManifestation" >
+
+              <b-form-group
+                  label="Name:"
+              >
+                <b-input disabled v-model="this.manifestation.name" required></b-input>
+              </b-form-group>
+
+              <b-form-group
+                  label="Current date:"
+              >
+                <b-card>{{ this.manifestation.date }}</b-card>
+              </b-form-group>
+              <b-form-group
+                  label="Choose new date:"
+              >
+                <b-input type="date" v-model="editDate" required></b-input>
+              </b-form-group>
+
+              <b-form-group
+                  label="Date:"
+              >
+                <b-form-timepicker v-model="editTime" placeholder="Choose new time" locale="en"></b-form-timepicker>
+              </b-form-group>
+
+
+              <b-form-group
+                  label="Price:"
+              >
+                <b-input v-model="manifestation.price" required></b-input>
+              </b-form-group>
+                <b-form-group label="City:">
                 <b-form-input
-                    id="filter-input"
-                    v-model="filter"
-                    type="search"
-                    placeholder="Type to Search"
+                    v-model="manifestation.location.address.city"
+                    type="text"
+                    placeholder="Enter manifestation city"
+                    required
                 ></b-form-input>
+                </b-form-group>
+                <b-form-group label="Street name:">
+                  <b-form-input
+                      v-model="manifestation.location.address.streetName"
+                      type="text"
+                      placeholder="Enter manifestation street name:"
+                      required
+                  ></b-form-input>
+                </b-form-group>
+                <b-form-group label="Street number:">
+                  <b-form-input
+                      v-model="manifestation.location.address.streetNumber"
+                      type="text"
+                      placeholder="Enter manifestation street number:"
+                      required
+                  ></b-form-input>
+                </b-form-group>
+                <b-form-group label="Postal code:">
+                  <b-form-input
+                      v-model="manifestation.location.address.postalCode"
+                      type="text"
+                      placeholder="Enter postal code"
+                      required
+                  ></b-form-input>
+                </b-form-group>
 
-                <b-input-group-append>
-                  <b-button :disabled="!filter" @click="filter = ''">Clear</b-button>
-                </b-input-group-append>
-              </b-input-group>
-            </b-form-group>
-          </b-col>
-
-        </b-row>
-
-        <!-- Main table element -->
-        <b-table
-            :items="items"
-            :fields="fields"
-            :filter="filter"
-            :sort-by.sync="sortBy"
-            :sort-desc.sync="sortDesc"
-            :sort-direction="sortDirection"
-            stacked="md"
-            show-empty
-            small
-        >
-          <template #cell(name)="row">
-            {{ row.value }}
-          </template>
-
-          <template #cell(picture)="row">
-            {{ row.value }}
-          </template>
-          <template #cell(details)="row">
-            <b-button size="sm" @click="info(row.item, row.index, $event.target)" class="mr-1">
-
-              Details
-            </b-button>
-            <b-button v-if="isSeller" size="sm" @click="editModalInfo(row.item, row.index, $event.target)" class="mr-1">
-              Edit
-            </b-button>
-          </template>
-
-          <template #row-details="row">
-            <b-card>
-              <ul>
-                <li v-for="(value, key) in row.item" :key="key">
-                  {{ key }}: {{ value }}
-                </li>
-              </ul>
-            </b-card>
-          </template>
-        </b-table>
-
-        <!-- Info modal -->
-        <b-modal :id="infoModal.id" :title="this.manifestation.name" ok-only @hide="resetInfoModal()">
-
-          <b-form-group
-              label="Name:"
-          >
-            <b-card>{{ this.manifestation.name }}</b-card>
-          </b-form-group>
-
-          <b-form-group
-              label="Date:"
-          >
-            <b-card>{{ this.manifestation.date }}</b-card>
-          </b-form-group>
-
-          <b-form-group
-              label="Price:"
-          >
-            <b-card>{{ this.manifestation.price }}</b-card>
-          </b-form-group>
-          <b-form-group
-              label="Location:"
-          >
-            <b-card><i>City : </i>{{ this.manifestation.location.address.city }} , <i>Address : </i>  {{ this.manifestation.location.address.streetName}} {{this.manifestation.location.address.streetNumber }},
-              {{this.manifestation.location.address.postalCode}}
-            </b-card>
-            <b-card> <i>Latitude :</i> {{this.manifestation.location.latitude}}, <i>Longitude : </i> {{this.manifestation.location.longitude}}
-
-            </b-card>
-          </b-form-group>
-          <b-form-group
-              label="Type:"
-          >
-            <b-card>{{ this.manifestation.type }}</b-card>
-          </b-form-group>
-          <b-form-group
-              label="Status:"
-          >
-            <b-card>{{ this.manifestation.status }}</b-card>
-          </b-form-group>
-
-          <b-form-group
-              label="Capacity:"
-          >
-            <b-card>{{ this.manifestation.capacity }}</b-card>
-          </b-form-group>
-<!--          <img :src="getImgUrl()" alt="">-->
-        </b-modal>
+                <b-form-group label="Latitude:">
+                  <b-form-input
+                      v-model="manifestation.location.latitude"
+                      type="text"
+                      placeholder="Enter Latitude"
+                      required
+                  ></b-form-input>
+                </b-form-group>
+                <b-form-group label="Longitude:">
+                  <b-form-input
+                      v-model="manifestation.location.longitude"
+                      type="text"
+                      placeholder="Enter Longitude"
+                      required
+                  ></b-form-input>
+                </b-form-group>
 
 
+              <b-form-group label="Type:" >
+                <b-form-select
+                    id="input-3"
+                    v-model="manifestation.type"
+                    :options="manifestationTypes"
+                    required
+                ></b-form-select>
+              </b-form-group>
+              <b-form-group
+                  label="Status:"
+              >
+                <b-card>{{ this.manifestation.status }}</b-card>
+              </b-form-group>
 
-        <!-- Edit modal -->
-        <b-modal :id="this.editModal.id" :title="this.editModal.title" @ok="updateManifestation" >
+              <b-form-group
+                  label="Capacity:"
+              >
+                <b-input required v-model="this.manifestation.capacity"></b-input>
+              </b-form-group>
 
-          <b-form-group
-              label="Name:"
-          >
-            <b-input disabled v-model="this.manifestation.name" required></b-input>
-          </b-form-group>
-
-          <b-form-group
-              label="Current date:"
-          >
-            <b-card>{{ this.manifestation.date }}</b-card>
-          </b-form-group>
-          <b-form-group
-              label="Choose new date:"
-          >
-            <b-input type="date" v-model="editDate" required></b-input>
-          </b-form-group>
-
-          <b-form-group
-              label="Date:"
-          >
-            <b-form-timepicker v-model="editTime" placeholder="Choose new time" locale="en"></b-form-timepicker>
-          </b-form-group>
-
-
-          <b-form-group
-              label="Price:"
-          >
-            <b-input v-model="manifestation.price" required></b-input>
-          </b-form-group>
-            <b-form-group label="City:">
-            <b-form-input
-                v-model="manifestation.location.address.city"
-                type="text"
-                placeholder="Enter manifestation city"
-                required
-            ></b-form-input>
-            </b-form-group>
-            <b-form-group label="Street name:">
-              <b-form-input
-                  v-model="manifestation.location.address.streetName"
-                  type="text"
-                  placeholder="Enter manifestation street name:"
-                  required
-              ></b-form-input>
-            </b-form-group>
-            <b-form-group label="Street number:">
-              <b-form-input
-                  v-model="manifestation.location.address.streetNumber"
-                  type="text"
-                  placeholder="Enter manifestation street number:"
-                  required
-              ></b-form-input>
-            </b-form-group>
-            <b-form-group label="Postal code:">
-              <b-form-input
-                  v-model="manifestation.location.address.postalCode"
-                  type="text"
-                  placeholder="Enter postal code"
-                  required
-              ></b-form-input>
-            </b-form-group>
-
-            <b-form-group label="Latitude:">
-              <b-form-input
-                  v-model="manifestation.location.latitude"
-                  type="text"
-                  placeholder="Enter Latitude"
-                  required
-              ></b-form-input>
-            </b-form-group>
-            <b-form-group label="Longitude:">
-              <b-form-input
-                  v-model="manifestation.location.longitude"
-                  type="text"
-                  placeholder="Enter Longitude"
-                  required
-              ></b-form-input>
-            </b-form-group>
-
-
-          <b-form-group label="Type:" >
-            <b-form-select
-                id="input-3"
-                v-model="manifestation.type"
-                :options="manifestationTypes"
-                required
-            ></b-form-select>
-          </b-form-group>
-          <b-form-group
-              label="Status:"
-          >
-            <b-card>{{ this.manifestation.status }}</b-card>
-          </b-form-group>
-
-          <b-form-group
-              label="Capacity:"
-          >
-            <b-input required v-model="this.manifestation.capacity"></b-input>
-          </b-form-group>
-          <!--          <img :src="getImgUrl()" alt="">-->
-        </b-modal>
-      </b-container>
-
+            </b-modal>
+        </b-container>
+    </div>
+    <div  v-if="isDetailedView">
+      <manifestation-detailed-view-component :manifestation="this.manifestation"></manifestation-detailed-view-component>
+    </div>
   </div>
 </template>
 
 <script>
 import api from '../backend-api'
+import ManifestationDetailedViewComponent from "@/components/ManifestationDetailedViewComponent";
 export default {
   name: "HomeComponent",
+  components: {ManifestationDetailedViewComponent},
   data() {
     return {
       items: [],
@@ -327,6 +310,7 @@ export default {
         regularPrice:"",
         capacity:""
       },
+      isDetailedView: false,
       sortBy: '',
       sortDesc: false,
       sortDirection: 'asc',
@@ -344,7 +328,8 @@ export default {
       },
       isLoggedIn: false,
       editDate:'',
-      editTime:''
+      editTime:'',
+      notCustomer:true
     }
   },
   computed: {
@@ -361,12 +346,15 @@ export default {
     if(localStorage.getItem('role') === "seller"){
       this.isSeller = true;
     }
+    if(localStorage.getItem('role') === 'customer'){
+      this.notCustomer = false
+    }
     this.isLoggedIn = !!localStorage.getItem("username");
     this.loadManifestations();
 
   },
   methods: {
-    info(item, index, button) {
+    info(item) {
       this.manifestation.name = item.name;
       this.manifestation.date = item.dateAndTime;
       this.manifestation.location = item.location;
@@ -376,7 +364,7 @@ export default {
       this.manifestation.type = item.type;
       this.manifestation.status = item.status;
       this.manifestation.capacity = item.capacity;
-      this.$root.$emit('bv::show::modal', this.infoModal.id, button)
+      this.isDetailedView = true;
     },
     editModalInfo(item, index, button) {
       this.manifestation.name = item.name;
@@ -424,11 +412,9 @@ export default {
     myProfileRoute(){
       this.$router.push('/profile');
     },
-    dashboardRoute(){
-      if(localStorage.getItem('role') === "admin")
+    dashboardRoute() {
+      if (localStorage.getItem('role') === "admin"){
         this.$router.push('/admin-dashboard');
-      else if (localStorage.getItem('role') === "customer"){
-        this.$router.push('/customer-dashboard');
       }else if (localStorage.getItem('role') === "seller"){
         this.$router.push('/seller-dashboard');
       }
@@ -446,10 +432,8 @@ export default {
 
       this.manifestationEdit.type = this.manifestation.type;
 
-      console.log(this.manifestationEdit);
-      api.updateManifestation(this.manifestationEdit).then(response =>{
-        console.log(response)
-      });
+      api.updateManifestation(this.manifestationEdit).then();
+      alert("Successfully updated manifestation!")
     }
 
   }
@@ -458,5 +442,54 @@ export default {
 
 
 <style scoped>
+.custom-select {
+  height: 40px;
+  border-radius: 5px;
+  border: 1px solid #ced4da;
+
+}
+
+.complex-search {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+
+}
+.complex-search-date > .form-control{
+  height: 40px;
+}
+.complex-search-input {
+  height: 40px;
+}
+
+.filter-search {
+  height: 40px;
+}
+
+.button-group-header {
+  margin-bottom: 30px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+
+}
+.btn-secondary {
+  margin-left: 5px;
+}
+
+.table-home-page {
+  margin-top: 30px;
+}
+
+.complex-search-button {
+  height: 40px;
+}
+
+.edit-modal-container {
+  width: 600px;
+}
+
+
+
 
 </style>
