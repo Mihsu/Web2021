@@ -8,8 +8,8 @@
 	"active":true,
 	"collectedPoints":150},
 "rada":{
-	"username":"kupujemKarte",
-	"password":"kupujemKarte",
+	"username":"rada",
+	"password":"rada",
 	"firstName":"Radojka",
 	"lastName":"Radovanovic",
 	"gender":"FEMALE",
@@ -25,9 +25,9 @@
 	"birthDate":"1980-11-02",
 	"active":true,
 	"collectedPoints":5000},
-"user2":{
-	"username":"user2",
-	"password":"user2",
+"miilovan":{
+	"username":"miilovan",
+	"password":"miilovan",
 	"firstName":"Radojka",
 	"lastName":"Radovanovic",
 	"gender":"FEMALE",

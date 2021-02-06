@@ -1,4 +1,11 @@
-{"1":{"id": 1, "customerUsername":"customer","manifestationName":"Exit Festival", "content":"Najjaci festival", "rating":5,"approved":true},
-"2":{"id": 2,"customerUsername":"customer","manifestationName":"Exit Festival", "content":"Najjaci festival", "rating":5,"approved":true},
-"3":{"id": 3,"customerUsername":"customer","manifestationName":"Exit Festival", "content":"Najjaci festival", "rating":5,"approved":false}
+{"1":{"id": 1, "customerUsername":"rada","manifestationName":"Exit Festival", "content":"Najjaci festival", "rating":5,"approved":true},
+"2":{"id": 2,"customerUsername":"miilovan","manifestationName":"Exit Festival", "content":"Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sh", "rating":5,"approved":true},
+"3":{"id": 3,"customerUsername":"miilovan","manifestationName":"Opera", "content":"Najjaci festival", "rating":5,"approved":false},
+"4":{"id": 1, "customerUsername":"miilovan","manifestationName":"Opera", "content":"Najjaci festival", "rating":5,"approved":true},
+"5":{"id": 1, "customerUsername":"rada","manifestationName":"Exit Festival", "content":"Najjaci festival", "rating":2,"approved":true},
+"6":{"id": 1, "customerUsername":"zvonkomojheroj","manifestationName":"Koncert Zvonka Bogdana", "content":"Bravo Bogdane BRAVO", "rating":5,"approved":true},
+"7":{"id": 1, "customerUsername":"customer","manifestationName":"Exit Festival", "content":"Prosek", "rating":3,"approved":true},
+"8":{"id": 1, "customerUsername":"zvonkomojheroj","manifestationName":"Exit Festival", "content":"...", "rating":5,"approved":true},
+"9":{"id": 1, "customerUsername":"user2","manifestationName":"Exit Festival", "content":"", "rating":1,"approved":false}
+
 }
