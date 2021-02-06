@@ -4,7 +4,7 @@
 	"firstName":"Micko",
 	"lastName":"Miculic",
 	"gender":"MALE",
-	"birthDate":"11.11.1990.",
+	"birthDate":"1999-02-02",
 	"active":true,
 	"collectedPoints":150},
 "rada":{
@@ -13,7 +13,7 @@
 	"firstName":"Radojka",
 	"lastName":"Radovanovic",
 	"gender":"FEMALE",
-	"birthDate":"05.02.1999.",
+	"birthDate":"1979-05-11",
 	"active":true,
 	"collectedPoints":500},
 "zvonkomojheroj":{
@@ -22,7 +22,7 @@
 	"firstName":"Mijat",
 	"lastName":"Mijatovic",
 	"gender":"MALE",
-	"birthDate":"05.02.1990.",
+	"birthDate":"1980-11-02",
 	"active":true,
 	"collectedPoints":5000},
 "user2":{
@@ -31,6 +31,6 @@
 	"firstName":"Radojka",
 	"lastName":"Radovanovic",
 	"gender":"FEMALE",
-	"birthDate":"05.02.1999.",
+	"birthDate":"1995-02-03",
 	"active":true,
 	"collectedPoints":600}}

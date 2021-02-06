@@ -20,6 +20,7 @@ public class TicketDbDTO {
 	
 	private TicketTypes ticketType;
 
+	private boolean commentable;
 	
 	public TicketDbDTO() {
 		super();
@@ -35,6 +36,7 @@ public class TicketDbDTO {
 		this.buyerUsername = buyer;
 		this.status = status;
 		this.ticketType = ticketType;
+		this.commentable = false;
 	}
 
 	public int getId() {
@@ -91,6 +93,14 @@ public class TicketDbDTO {
 
 	public void setTicketType(TicketTypes ticketType) {
 		this.ticketType = ticketType;
+	}
+
+	public boolean isCommentable() {
+		return commentable;
+	}
+
+	public void setCommentable(boolean commentable) {
+		this.commentable = commentable;
 	}
 	
 }

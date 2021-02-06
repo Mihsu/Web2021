@@ -1,6 +1,6 @@
 {"Koncert Zvonka Bogdana":{"name":"Koncert Zvonka Bogdana", 
 "type": "CONCERT", "capacity": 100, 
-"dateAndTime": "01.01.2021. 10:00",
+"dateAndTime": "2021-02-24 01:00:00",
  "regularPrice": 1000, 
  "location" :{"latitude":"12312312312", "longitude":"123123123", 
   "address":{"streetName":"ulicaaa","streetNumber":"5","city":"Beijing", "postalCode":"99999"}
@@ -9,7 +9,7 @@
   "rating": "5",
   "status":"INACTIVE"}
 ,
-"manifestatino2":{"name":"manifestatino2", "type": "FESTIVAL", "capacity": 300, "dateAndTime": "05.05.2021. 10:00", "regularPrice": 2000, "location" :{"latitude":"12312212312", "longitude":"1223123", "address":{"streetName":"Boska Buhe","streetNumber":"99","city":"Bangkok", "postalCode":"3322323"}},
+"Exit Festival":{"name":"Exit Festival", "type": "FESTIVAL", "capacity": 300, "dateAndTime": "2020-07-24 20:00:00", "regularPrice": 2000, "location" :{"latitude":"12312212312", "longitude":"1223123", "address":{"streetName":"Tvrdjava","streetNumber":"99","city":"Novi Sad", "postalCode":"3322323"}},
   "posterImagePath":"logo.png",
   "rating": "5",
   "status":"INACTIVE"}}
