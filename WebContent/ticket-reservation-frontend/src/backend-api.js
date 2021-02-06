@@ -23,5 +23,14 @@ export default {
     },
     createManifestation(manifestation) {
         return AXIOS.post('/manifestations/add', manifestation)
+    },
+    getReservedTickets(){
+        return AXIOS.get('/tickets/reserved')
+    },
+    getAllTickets(){
+        return AXIOS.get('/tickets/all')
+    },
+    updateManifestation(manifestation){
+        return AXIOS.post('/manifestations/update', manifestation)
     }
 }

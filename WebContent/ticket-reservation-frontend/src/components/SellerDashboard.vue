@@ -14,6 +14,15 @@
         ></b-form-input>
       </b-form-group>
 
+      <b-form-group label="Price :">
+        <b-form-input
+            v-model="manifestation.regularPrice"
+            type="text"
+            placeholder="Enter manifestation price"
+            required
+        ></b-form-input>
+      </b-form-group>
+
       <b-form-group label="City:">
         <b-form-input
             v-model="manifestation.location.address.city"
@@ -99,7 +108,12 @@
    </div>
 
   <div class="desni-deo">
-
+    <h1>RESERVED TICKETS</h1>
+    <template>
+      <div>
+        <b-table striped hover :items="tickets" :fields="fields" ></b-table>
+      </div>
+    </template>
   </div>
 </div>
 </template>
@@ -123,7 +137,7 @@ name: "SellerDashboard",
       name:"",
       type:"",
       dateAndTime: "",
-      regularPrice: 1,
+      regularPrice:"",
       location:{
         address:{
           streetName:"",
@@ -135,13 +149,23 @@ name: "SellerDashboard",
         longitude:""
       }
     },
-    date:"",
-    time:"",
+    date:Date,
+    time:'',
+    tickets:[],
+    fields: ['id', 'manifestationName', 'dateAndTime', 'price', 'buyerUsername', 'ticketType'],
   }
 },
-methods: {
+  mounted() {
+    api.getReservedTickets().then(response =>{
+      console.log(response)
+      this.tickets = response.data;
+    })
+  },
+  methods: {
   onSubmit(event) {
-    event.preventDefault()
+    this.manifestation.dateAndTime = this.date + " " + this.time;
+    console.log(this.manifestation.dateAndTime);
+    event.preventDefault();
     api.createManifestation(this.manifestation).then(response =>{
       console.log(response)
     })
@@ -152,7 +176,7 @@ methods: {
           name:"",
           type:"",
           dateAndTime: "",
-          regularPrice: 1,
+          regularPrice: "",
           location:{
             address:{
               streetName:"",
@@ -179,5 +203,6 @@ methods: {
 .seller-dashboard {
   display: flex;
   flex-direction: row;
+  justify-content: space-around;
 }
 </style>
