@@ -1,7 +1,7 @@
 <template>
 <div>
-  <b-button @click="logOut"> Log out</b-button>
-  <b-button @click="homeRoute">Home</b-button>
+  <b-button class="nav-button" @click="logOut"> Log out</b-button>
+  <b-button class="nav-button" @click="homeRoute">Home</b-button>
   <div class="seller-dashboard">
     <div class="create-manifestation-form">
 
@@ -248,6 +248,11 @@ name: "SellerDashboard",
   height: 38px;
   border-radius: 5px;
   padding: 0 15px 0 5px;
+}
+.nav-button {
+  margin-right: 5px;
+  border-radius: 7px;
+
 }
 .button-group-submit {
   display: flex;

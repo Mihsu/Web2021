@@ -1,11 +1,13 @@
 <template>
 <div>
+<div v-if="!goHome">
     <div class="button-group-header">
-      <b-button v-if="isLoggedIn" @click="logOut"> Log out</b-button>
-      <b-button v-if="isLoggedIn" @click="myProfileRoute">My Profile</b-button>
-      <b-button v-if="!isLoggedIn" @click="loginRoute"> Login</b-button>
-      <b-button v-if="!isLoggedIn" @click="registerRoute"> Register</b-button>
-      <b-button v-if="isLoggedIn" @click="dashboardRoute">DASHBOARD</b-button>
+      <b-button class="nav-button" v-if="isLoggedIn" @click="logOut"> Log out</b-button>
+      <b-button class="nav-button" v-if="isLoggedIn" @click="myProfileRoute">My Profile</b-button>
+      <b-button class="nav-button" v-if="!isLoggedIn" @click="loginRoute"> Login</b-button>
+      <b-button class="nav-button" v-if="!isLoggedIn" @click="registerRoute"> Register</b-button>
+      <b-button class="nav-button" v-if="isLoggedIn && notCustomer" @click="dashboardRoute">DASHBOARD</b-button>
+      <b-button class="nav-button" @click="showHomeComponent">Home</b-button>
     </div>
     <b-form-group
         label="Name:"
@@ -50,25 +52,68 @@
     >
       <b-card>{{ this.manifestation.capacity }}</b-card>
     </b-form-group>
-    <!--          <img :src="getImgUrl()" alt="">-->
+      <img :src="fullPath" alt=""/>
+
 </div>
+  <div class="comments-view" v-for="comment in comments" :key="comment">
+    <b-card
+        :title="comment.customerUsername"
+        img-alt="Image"
+        img-top
+        tag="article"
+        style="max-width: 20rem;"
+        class="mb-2"
+    >
+      <b-card-text>
+        <b-form-rating v-model="comment.rating" disabled stars="5"></b-form-rating>
+        {{ comment.content }}
+      </b-card-text>
+      <b-button v-if="!comment.approved" @click="approveComment(comment.id)"> Approve</b-button>
+    </b-card>
+  </div>
+ </div>
 </template>
 
 <script>
+import api from '../backend-api'
 export default {
 name: "ManifestationDetailedViewComponent",
+  components: {},
   props:{
     manifestation:{}
   },
   data(){
     return{
-      isLoggedIn:false
+      isLoggedIn:false,
+      comments:[],
+      notCustomer:true,
+      goHome: false,
+      fullPath:""
     }
   },
   mounted() {
     this.isLoggedIn = !!localStorage.getItem('username');
+    if(localStorage.getItem('role') ==="customer"){
+      this.notCustomer = false;
+    }
+    this.loadComments();
+    this.fullPath = require('../assets/'+this.manifestation.posterImagePath);
   },
   methods:{
+    loadComments(){
+      if(localStorage.getItem('role') === 'admin' || (localStorage.getItem('role') === 'seller')){
+
+        api.getAllComments(this.manifestation.name).then(response =>{
+          this.comments = response.data;
+        })
+      }else{
+        api.getApprovedComments(this.manifestation.name).then(response => {
+
+          this.comments = response.data;
+        });
+      }
+
+    },
     logOut(){
       localStorage.clear();
       this.$router.push('/login')
@@ -82,6 +127,9 @@ name: "ManifestationDetailedViewComponent",
     myProfileRoute(){
       this.$router.push('/profile');
     },
+    showHomeComponent(){
+      this.$emit('goHome');
+    },
 
     dashboardRoute(){
       if(localStorage.getItem('role') === "admin")
@@ -92,11 +140,21 @@ name: "ManifestationDetailedViewComponent",
         this.$router.push('/seller-dashboard');
       }
     },
+    approveComment(commentId){
+      api.approveComment(commentId);
+      alert("Comment approved!");
+
+    }
+
 
   }
 }
 </script>
 
 <style scoped>
+.nav-button {
+  margin-right: 5px;
+  border-radius: 7px;
 
+}
 </style>

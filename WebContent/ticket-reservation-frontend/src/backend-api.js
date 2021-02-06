@@ -38,6 +38,34 @@ export default {
     },
     submitComment(comment) {
         return AXIOS.post('/comment', comment)
+    },
+    getAllComments(manifestationName){
+        return AXIOS.get('/comment/getall/' + manifestationName)
+    },
+    getApprovedComments(manifestationName){
+        return  AXIOS.get('/comment/get/' + manifestationName)
+    },
+    approveComment(commentId){
+        return AXIOS.post('/comment/approve/'+commentId)
+    },
+    getAllUsers() {
+        return AXIOS.get('/user/allusers')
+    }, loadManifestationsActive() {
+        return AXIOS.get('/manifestations/allactive')
+
+    },approveManifestation(manifestationName){
+        return AXIOS.post('/manifestations/approve/' + manifestationName);
+    },
+    addSeller(newUser){
+        return AXIOS.post('/user/addseller', newUser)
+    },
+    manifestationComplexSearch(complex){
+        return AXIOS.get('/manifestations/complex/'+complex.name + '/'+complex.city+'/'+complex.priceFrom+'/' +complex.priceTo
+            + '/' + complex.dateFrom + '/' + complex.dateTo)
+    },
+    ticketComplexSearch(complexTicket){
+        return AXIOS.get('/tickets/complex/'+complexTicket.priceFrom+'/' +complexTicket.priceTo
+            + '/' + complexTicket.dateFrom + '/' + complexTicket.dateTo)
     }
 
 }
