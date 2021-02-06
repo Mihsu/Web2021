@@ -1,12 +1,17 @@
 <template>
-<div>
+  <div>
+    <b-button @click="homeRoute">Home</b-button>
 
-  <p>{{user.username}}</p>
-  <b-input required type="text" placeholder="Username" v-model="user.username" />
-  <b-input required type="password" placeholder="password" v-model="user.password" />
-  <b-button @click="login">LOGIN</b-button>
+  <div class="login-container">
 
-</div>
+    <div class="login">
+      <h1>Log in</h1>
+      <b-input required type="text" placeholder="Username" v-model="user.username" />
+      <b-input required type="password" placeholder="Password" v-model="user.password" />
+      <b-button variant="primary" @click="login">Log in</b-button>
+    </div>
+  </div>
+  </div>
 </template>
 
 <script>
@@ -56,11 +61,37 @@ export default {
       }
       return true
     },
+    homeRoute(){
+      this.$router.push('/');
+    }
   }
 
 }
 </script>
 
 <style scoped>
+.login-container {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-bottom: 200px;
+
+
+}
+.login {
+  background-color: #3F4B8D;
+  height: 300px;
+  width: 400px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: space-around;
+  padding: 50px 20px 50px 20px;
+  color: white;
+  border-radius: 20px;
+
+}
 
 </style>
