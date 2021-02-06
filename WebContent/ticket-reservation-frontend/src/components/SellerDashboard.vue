@@ -178,9 +178,10 @@ name: "SellerDashboard",
     this.manifestation.dateAndTime = this.date + " " + this.time;
     console.log(this.manifestation.dateAndTime);
     event.preventDefault();
-    api.createManifestation(this.manifestation).then(response =>{
-      console.log(response)
-    })
+    api.createManifestation(this.manifestation);
+    alert("Successfully added manifestation!");
+    this.onReset1();
+
   },
     logOut(){
       localStorage.clear();
@@ -190,8 +191,26 @@ name: "SellerDashboard",
       this.$router.push('/');
     },
     onReset(event) {
-    event.preventDefault()
-    this.manifestation={
+      event.preventDefault()
+      this.manifestation = {
+        name: "",
+        type: "",
+        dateAndTime: "",
+        regularPrice: "",
+        location: {
+          address: {
+            streetName: "",
+            streetNumber: "",
+            city: "",
+            postalCode: ""
+          },
+          latitude: "",
+          longitude: ""
+        }
+      }
+    },
+        onReset1(){
+        this.manifestation={
           name:"",
           type:"",
           dateAndTime: "",
@@ -199,14 +218,14 @@ name: "SellerDashboard",
           location:{
             address:{
               streetName:"",
-                  streetNumber: "",
-                  city:"",
-                  postalCode:""
+              streetNumber: "",
+              city:"",
+              postalCode:""
             },
             latitude:"",
             longitude:""
-      }
-    }
+          }
+        }
     this.date="";
     this.time="";
     this.show = false

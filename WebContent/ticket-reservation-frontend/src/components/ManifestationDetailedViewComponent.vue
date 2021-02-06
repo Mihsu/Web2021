@@ -1,6 +1,7 @@
 <template>
-<div>
-<div v-if="!goHome">
+<div class="details-comments-container">
+<div class="details-info">
+  <div>
     <div class="button-group-header">
       <b-button class="nav-button" v-if="isLoggedIn" @click="logOut"> Log out</b-button>
       <b-button class="nav-button" v-if="isLoggedIn" @click="myProfileRoute">My Profile</b-button>
@@ -9,10 +10,11 @@
       <b-button class="nav-button" v-if="isLoggedIn && notCustomer" @click="dashboardRoute">DASHBOARD</b-button>
       <b-button class="nav-button" @click="showHomeComponent">Home</b-button>
     </div>
-    <b-form-group
+    <h2>Manifestation information</h2>
+   <b-form-group
         label="Name:"
     >
-      <b-card>{{ this.manifestation.name }}</b-card>
+    <b-card>{{ this.manifestation.name }}</b-card>
     </b-form-group>
 
     <b-form-group
@@ -52,9 +54,16 @@
     >
       <b-card>{{ this.manifestation.capacity }}</b-card>
     </b-form-group>
-      <img :src="fullPath" alt=""/>
 
+  </div>
 </div>
+  <div class="picture-div">
+    <div>
+    <img :src="fullPath" alt=""/>
+    </div>
+  </div>
+  <div class="comments-grid">
+    <h2>Customer reviews:</h2>
   <div class="comments-view" v-for="comment in comments" :key="comment">
     <b-card
         :title="comment.customerUsername"
@@ -64,14 +73,15 @@
         style="max-width: 20rem;"
         class="mb-2"
     >
-      <b-card-text>
+      <b-card-text >
         <b-form-rating v-model="comment.rating" disabled stars="5"></b-form-rating>
         {{ comment.content }}
       </b-card-text>
       <b-button v-if="!comment.approved" @click="approveComment(comment.id)"> Approve</b-button>
     </b-card>
   </div>
- </div>
+  </div>
+</div>
 </template>
 
 <script>
@@ -87,7 +97,6 @@ name: "ManifestationDetailedViewComponent",
       isLoggedIn:false,
       comments:[],
       notCustomer:true,
-      goHome: false,
       fullPath:""
     }
   },
@@ -156,5 +165,37 @@ name: "ManifestationDetailedViewComponent",
   margin-right: 5px;
   border-radius: 7px;
 
+}
+.details-info {
+  display: flex;
+  height: 100px;
+
+
+}
+.comments-view {
+  margin-top: 15px;
+  height: fit-content ;
+
+}
+.details-comments-container{
+  display: flex;
+  justify-content: space-around;
+  margin-top: 15px;
+
+}
+.picture-div {
+  height: 200px;
+
+}
+.comments-grid{
+  display: flex;
+  width: 400px;
+  flex-direction: column;
+  padding: 10px 10px 20px 30px;
+
+}
+.button-group-header {
+  margin-bottom: 20px;
+  margin-top: 10px;
 }
 </style>

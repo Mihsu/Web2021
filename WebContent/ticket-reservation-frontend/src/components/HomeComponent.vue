@@ -266,8 +266,8 @@ export default {
     return {
       items: [],
       fields: [
-        { key: 'name', label: 'Manifestation Name', sortable: true, sortDirection: 'desc' },
-        { key: 'dateAndTime', label: 'Date', sortable: true, class: 'text-center' },
+        { key: 'name', label: 'Manifestation Name', sortable: true },
+        { key: 'dateAndTime', label: 'Date', sortable: true, class: 'text-center', sortDirection: 'desc' },
         { key: 'location.address.city', label: 'Location', sortable: true, class: 'text-center' },
         { key: 'type', label: 'Type', sortable: true, class: 'text-center' },
         { key: 'regularPrice', label: 'Price', sortable: true, class: 'text-center' },
@@ -292,7 +292,7 @@ export default {
         },
         price:"",
         rating:"",
-        posterImagePath:"logo.png",
+        posterImagePath:"",
         status:"",
         capacity:0
       },
@@ -385,6 +385,7 @@ export default {
       this.manifestation.type = item.type;
       this.manifestation.status = item.status;
       this.manifestation.capacity = item.capacity;
+      this.manifestation.posterImagePath = item.posterImagePath;
       this.isDetailedView = true;
     },
     editModalInfo(item, index, button) {
